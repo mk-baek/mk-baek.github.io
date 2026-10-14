@@ -14,16 +14,15 @@ export const SITE = {
     /** Each item is its own line. */
     headline: ['A changing world.', 'An evolving perspective.'],
     lead: 'A journal on sustainability — making sense of change and finding better ways forward for businesses, people, and the planet.',
-    cta: 'About The Current',
-    ctaHref: '/about/',
+    cta: 'Explore The Current',
+    ctaHref: '#the-current',
   },
 
   /** Home page: "About The Current" */
   homeAbout: {
-    title: 'About The Current',
+    title: 'The Current',
     lead: 'A personal journal of knowledge and growth in motion.',
-    text: 'Through reading notes, reflections, and projects, The Current explores how a changing world shapes the choices businesses make, and how those choices can support a more sustainable future.',
-    link: 'Read the story behind The Current',
+    text: 'The Current explores how a changing world shapes business decisions and how those choices can support a more sustainable future.',
   },
 
   /** About page: "Why The Current" */

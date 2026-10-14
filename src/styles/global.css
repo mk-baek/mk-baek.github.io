@@ -73,6 +73,7 @@
 }
 
 html {
+  scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   /* full-width spreads use 100vw, which includes a desktop scrollbar; never scroll sideways */
@@ -954,6 +955,9 @@ html.motion-paused *::after {
   *::after {
     transition-duration: 0ms !important;
     animation: none !important;
+  }
+  html {
+    scroll-behavior: auto;
   }
 }
 
