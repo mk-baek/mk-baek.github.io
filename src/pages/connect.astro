@@ -1,0 +1,144 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../site';
+
+const { bio } = SITE;
+// The first sentence is set large; everything after it reads as normal paragraphs.
+const [lead, ...rest] = bio.paragraphs[0].split(/(?<=\.)\s+/);
+const paragraphs = [rest.join(' '), ...bio.paragraphs.slice(1)].filter(Boolean);
+---
+
+<Base title="Connect" description={`About ${SITE.author}, and where to connect.`}>
+  <div class="container contact">
+    <header class="page-head contact__head">
+      <span class="annot">behind The Current</span>
+      <h1 class="visually-hidden">Connect</h1>
+    </header>
+
+    <div class="contact__grid">
+      <section class="contact__bio" aria-label={`About ${SITE.author}`}>
+        <p class="contact__lead">{lead}</p>
+        <div class="prose">
+          {paragraphs.map((p) => <p>{p}</p>)}
+        </div>
+      </section>
+
+      <aside class="contact__side">
+        <section class="focus" aria-labelledby="focus-title">
+          <h3 id="focus-title" class="eyebrow">{bio.focusTitle}</h3>
+          <ul>
+            {bio.focus.map((f) => <li>{f}</li>)}
+          </ul>
+        </section>
+
+        <section class="reach" aria-labelledby="reach-title">
+          <h3 id="reach-title" class="eyebrow">Get in touch</h3>
+          <p>For conversations on sustainability, strategy, or anything written here, connect on LinkedIn.</p>
+          <a class="reach__btn" href={SITE.linkedin} rel="me noopener" target="_blank">
+            Connect on LinkedIn <span aria-hidden="true">↗</span>
+          </a>
+        </section>
+      </aside>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .contact__grid {
+    display: grid;
+    gap: 40px 72px;
+  }
+
+  @media (min-width: 900px) {
+    .contact__grid {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+      align-items: start;
+    }
+  }
+
+  .contact__by {
+    font-size: clamp(28px, 3.4vw, 40px);
+    font-weight: 400;
+    font-style: italic;
+    margin-bottom: 20px;
+  }
+
+  .contact__head h1 {
+  }
+
+  .contact__lead {
+    font-family: var(--font-serif);
+    font-size: var(--title-lead);
+    line-height: 1.45;
+    color: var(--deep);
+    margin-bottom: 1.2em;
+    font-weight: 400;
+  }
+
+  .contact__side {
+    display: grid;
+    gap: 20px;
+  }
+
+  .focus,
+  .reach {
+    padding: 22px 24px;
+    background: color-mix(in srgb, var(--paper) 82%, transparent);
+    border: 1px solid var(--sea-mid);
+    border-radius: 14px;
+  }
+
+  .focus ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .focus li {
+    position: relative;
+    padding: 10px 0 10px 22px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--deep);
+  }
+
+  .focus li + li {
+    border-top: 1px solid var(--sea-mid);
+  }
+
+  .focus li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 17px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .reach p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  .reach__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 10px 22px;
+    border-radius: 999px;
+    background: var(--deep);
+    color: var(--paper);
+    font-size: 16px;
+    text-decoration: none;
+    transition: background var(--ease);
+  }
+
+  .reach__btn:hover,
+  .reach__btn:focus-visible {
+    background: var(--accent);
+  }
+</style>

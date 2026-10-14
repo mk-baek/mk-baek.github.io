@@ -1,0 +1,161 @@
+---
+/**
+ * Three shortcuts in one row: About, Journal, Library.
+ * Each is a single large link; on hover/focus a ripple opens at its mark.
+ */
+interface Props {
+  entries: number;
+  library: number;
+}
+const { entries, library } = Astro.props;
+
+const items = [
+  {
+    href: '/about/',
+    label: 'About',
+    note: 'why The Current',
+    text: 'A personal journal of knowledge, reflection, and growth in motion.',
+    meta: '3 meanings',
+  },
+  {
+    href: '/journal/',
+    label: 'Journal',
+    note: 'what I explore',
+    text: 'Projects, notes, and insights that connect ideas and inspire new questions.',
+    meta: entries ? `${entries} ${entries === 1 ? 'entry' : 'entries'}` : 'First entries coming',
+  },
+  {
+    href: '/library/',
+    label: 'Library',
+    note: 'what informs me',
+    text: 'Books, reports, and articles that shape my thinking and broaden my perspective.',
+    meta: library ? `${library} ${library === 1 ? 'item' : 'items'}` : 'First picks coming',
+  },
+];
+---
+
+<nav class="shortcuts" aria-label="Sections">
+  <ul>
+    {
+      items.map((it) => (
+        <li>
+          <a class="shortcut" href={it.href}>
+            <span class="shortcut__mark" aria-hidden="true" />
+            <span class="shortcut__label">{it.label}</span>
+            <span class="annot shortcut__note">{it.note}</span>
+            <span class="shortcut__text">{it.text}</span>
+            <span class="shortcut__go">
+              {it.meta} <span aria-hidden="true">→</span>
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .shortcuts ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 16px;
+  }
+
+  @media (min-width: 820px) {
+    .shortcuts ul {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+  }
+
+  .shortcut {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 28px 28px 24px;
+    border: 1px solid var(--sea-mid);
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--paper) 82%, transparent);
+    color: var(--ink);
+    text-decoration: none;
+    transition: border-color var(--ease), transform var(--ease), background var(--ease);
+  }
+
+  .shortcut:hover,
+  .shortcut:focus-visible {
+    border-color: var(--accent);
+    background: var(--paper);
+    transform: translateY(-3px);
+  }
+
+  .shortcut__mark,
+  .shortcut__mark::after {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .shortcut__mark {
+    position: relative;
+    border: 1.5px solid var(--deep);
+    margin-bottom: 22px;
+    transition: background var(--ease), border-color var(--ease);
+  }
+
+  .shortcut__mark::after {
+    content: '';
+    position: absolute;
+    left: -1.5px;
+    top: -1.5px;
+    border: 1.5px solid var(--accent);
+    opacity: 0;
+  }
+
+  .shortcut:hover .shortcut__mark,
+  .shortcut:focus-visible .shortcut__mark {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .shortcut:hover .shortcut__mark::after,
+  .shortcut:focus-visible .shortcut__mark::after {
+    animation: ripple 1.5s ease-out infinite;
+  }
+
+  .shortcut__label {
+    font-family: var(--font-serif);
+    font-size: clamp(32px, 3.2vw, 44px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--deep);
+  }
+
+  .shortcut__note {
+    margin-top: 10px;
+    font-size: 16px;
+  }
+
+  .shortcut__text {
+    margin-top: 12px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  .shortcut__go {
+    margin-top: auto;
+    padding-top: 22px;
+    font-size: 14px;
+    color: var(--deep);
+  }
+
+  .shortcut:hover .shortcut__go span {
+    display: inline-block;
+    transform: translateX(3px);
+    transition: transform var(--ease);
+  }
+</style>

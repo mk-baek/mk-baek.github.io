@@ -1,0 +1,39 @@
+{
+  "https://adamwerbach.com/portfolio/strategy-for-sustainability/": {
+    "title": "What is",
+    "description": "A business strategy book published by Harvard Business Press that gives companies practical tools for sustainability — North Star goals, STaR maps, and Personal Sustainability Practices. Named a top business book by Inc. Magazine and taught at Stanford, Wharton, and Harvard.",
+    "image": "https://adamwerbach.com/og/strategy-for-sustainability.png",
+    "siteName": "Adam Werbach Portfolio",
+    "fetchedAt": "2026-10-13"
+  },
+  "https://cup.columbia.edu/book/investing-in-the-era-of-climate-change/9780231200882/": {
+    "title": "Investing in the Era of Climate Change | Columbia University Press",
+    "description": "A climate catastrophe can be avoided, but only with a rapid and sustained investment in companies and projects that reduce greenhouse gas emissions. To the s... | CUP",
+    "image": "https://cup-us.imgix.net/covers/9780231200882.jpg?auto=format&w=350",
+    "siteName": "Columbia University Press",
+    "fetchedAt": "2026-10-13"
+  },
+  "https://sciencebasedtargets.org/corporate-net-zero": {
+    "title": "The Corporate Net-Zero Standard - Science Based Targets Initiative",
+    "description": "The SBTi’s Corporate Net-Zero Standard provides companies with the guidance and tools needed to set science-based targets aligned with reaching net-zero emissions by 2050 at the latest.",
+    "image": "https://media.sciencebasedtargets.org/production/media/city-sunset.jpeg?w=1200&h=630&auto=compress%2Cformat&fit=crop&dm=1780673718&s=9fdb225aa80005af5a7147adca4ac2e7",
+    "siteName": "Science Based Targets Initiative",
+    "fetchedAt": "2026-10-13"
+  },
+  "https://sciencebasedtargetsnetwork.org/step-up-for-nature-report/": {
+    "title": "Step Up for Nature Report – Science Based Targets Network",
+    "image": "https://sciencebasedtargetsnetwork.org/wp-content/uploads/2024/07/Copy-of-Add-a-heading-1-1024x658.png",
+    "siteName": "Science Based Targets Network",
+    "fetchedAt": "2026-10-13"
+  },
+  "https://www.ipcc.ch/report/ar6/syr/": {
+    "title": "AR6 Synthesis Report: Climate Change 2023",
+    "description": "Intergovernmental Panel on Climate Change",
+    "image": "https://ipcc.ch/frontcover.jpg",
+    "siteName": "IPCC",
+    "fetchedAt": "2026-10-13"
+  },
+  "https://www.youtube.com/playlist?list=PL77CE8943362CB9B0": {
+    "fetchedAt": "2026-10-13"
+  }
+}

@@ -1,0 +1,333 @@
+---
+import Base from '../../layouts/Base.astro';
+import EntryItem from '../../components/EntryItem.astro';
+import { getSite, explorableQuestions, isFromTalks, plainText, typePlural, type EntryType } from '../../lib/content';
+
+const site = await getSite();
+const entries = site.entries;
+const types = (['project', 'note', 'insight'] as EntryType[]).filter((t) => entries.some((e) => e.data.type === t));
+const questions = explorableQuestions(site).filter((q) => entries.some((e) => e.data.questions.includes(q.id)));
+
+// Static search index: title, summary, body, topics, source titles. Lower-cased for substring search (works for Korean).
+const index = entries.map((e) => ({
+  id: e.id,
+  type: e.data.type,
+  questions: e.data.questions,
+  topics: e.data.topics.map((t) => t.trim().toLowerCase()),
+  talks: isFromTalks(e),
+  text: [
+    e.data.title,
+    e.data.summary,
+    e.data.quote ?? '',
+    e.data.quoteBy ?? '',
+    e.data.topics.join(' '),
+    e.data.sources.map((s) => `${s.title} ${s.authorOrPublisher ?? ''}`).join(' '),
+    plainText(e.body),
+  ]
+    .join(' ')
+    .normalize('NFC')
+    .toLowerCase(),
+}));
+---
+
+<Base title="Journal" description="Projects, notes, and insights — what I work through, what I notice, and the lines worth keeping.">
+  <div class="container journal">
+    <header class="page-head journal__head">
+      <span class="annot">what I explore</span>
+      <h1>Journal</h1>
+      <p>What I work through, what I notice, and the lines worth keeping<br />— plus questions I haven’t answered yet.</p>
+    </header>
+
+    {
+      entries.length === 0 ? (
+        <p class="empty">The first entries are on their way.</p>
+      ) : (
+        <>
+          <form class="controls" role="search" aria-label="Filter entries" data-controls hidden>
+            <label class="search">
+              <span class="visually-hidden">Search entries</span>
+              <input type="search" name="q" placeholder="Search titles, notes, sources…" autocomplete="off" />
+            </label>
+            <div class="filters">
+            {types.length > 1 && (
+              <div class="types" role="group" aria-label="Entry type">
+                <button type="button" class="btn" data-type="" aria-pressed="true">
+                  All
+                </button>
+                {types.map((t) => (
+                  <button type="button" class="btn" data-type={t} aria-pressed="false">
+                    {typePlural[t]}
+                  </button>
+                ))}
+              </div>
+            )}
+            </div>
+            <p class="topic" data-topic-chip hidden>
+              Topic: <strong data-topic-label />{' '}
+              <button type="button" class="btn btn--small" data-topic-clear aria-label="Clear topic">
+                ✕
+              </button>
+            </p>
+            {questions.length > 0 && (
+              <label class="question">
+                <span>Exploring question</span>
+                <select name="question">
+                  <option value="">All questions</option>
+                  {questions.map((q) => (
+                    <option value={q.id}>{q.data.title}</option>
+                  ))}
+                </select>
+              </label>
+            )}
+          </form>
+
+          <p class="count meta" aria-live="polite" data-count />
+
+          <ul class="entry-list" data-list>
+            {entries.map((e) => (
+              <EntryItem entry={e} headingLevel="h2" />
+            ))}
+          </ul>
+
+          <div class="no-results" data-empty hidden>
+            <p>No entries match these filters.</p>
+            <button type="button" class="btn" data-reset>
+              Reset filters
+            </button>
+          </div>
+
+          <nav class="pager" aria-label="Pages" data-pager hidden />
+          <script type="application/json" id="journal-index" set:html={JSON.stringify(index)} />
+        </>
+      )
+    }
+  </div>
+</Base>
+
+<style>
+  /* a wider, centred column for the list */
+  .journal {
+    max-width: calc(920px + var(--gutter) * 2);
+  }
+
+  .journal__head {
+    text-align: center;
+  }
+
+  .journal__head p {
+    margin-inline: auto;
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .filters .types + .types {
+    padding-left: 10px;
+    border-left: 1px solid var(--sea-mid);
+  }
+
+  .empty {
+    color: var(--ink-soft);
+  }
+  .controls {
+    display: grid;
+    gap: 16px;
+    margin: 8px 0 12px;
+  }
+  .controls input,
+  .controls select {
+    font: inherit;
+    font-size: 16px;
+    width: 100%;
+    min-height: 46px;
+    padding: 8px 14px;
+    border: 1.5px solid var(--sea);
+    border-radius: 999px;
+    padding-inline: 20px;
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .controls input:focus-visible,
+  .controls select:focus-visible {
+    border-color: var(--deep);
+  }
+  .types {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .topic {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 15px;
+    color: var(--ink-soft);
+  }
+  .topic strong {
+    color: var(--deep);
+    font-weight: 600;
+  }
+  .btn--small {
+    min-height: 36px;
+    min-width: 36px;
+    padding: 4px 10px;
+  }
+  .question {
+    display: grid;
+    gap: 4px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .count {
+    margin: 8px 0 0;
+    min-height: 1.6em;
+  }
+  .no-results {
+    padding: 32px 0;
+    color: var(--ink-soft);
+  }
+  .pager {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 24px;
+  }
+</style>
+
+<script>
+  const PER_PAGE = 12;
+  type Item = { id: string; type: string; questions: string[]; topics: string[]; talks: boolean; text: string };
+
+  const dataEl = document.getElementById('journal-index');
+  const form = document.querySelector<HTMLFormElement>('[data-controls]');
+  const list = document.querySelector<HTMLUListElement>('[data-list]');
+
+  if (dataEl && form && list) {
+    const index: Item[] = JSON.parse(dataEl.textContent || '[]');
+    const rows = Array.from(list.children) as HTMLLIElement[];
+    const search = form.querySelector<HTMLInputElement>('input[name="q"]')!;
+    const select = form.querySelector<HTMLSelectElement>('select[name="question"]');
+    const typeButtons = Array.from(form.querySelectorAll<HTMLButtonElement>('[data-type]'));
+    const countEl = document.querySelector<HTMLElement>('[data-count]')!;
+    const emptyEl = document.querySelector<HTMLElement>('[data-empty]')!;
+    const pager = document.querySelector<HTMLElement>('[data-pager]')!;
+    const validTypes = new Set(typeButtons.map((b) => b.dataset.type).filter(Boolean));
+    const validQuestions = new Set(select ? Array.from(select.options).map((o) => o.value).filter(Boolean) : []);
+
+    type State = { q: string; type: string; question: string; from: string; topic: string; page: number };
+    const fromBtn = form.querySelector<HTMLButtonElement>('[data-from]');
+    const topicChip = form.querySelector<HTMLElement>('[data-topic-chip]')!;
+    const topicLabel = form.querySelector<HTMLElement>('[data-topic-label]')!;
+
+    const readUrl = (): State => {
+      const p = new URLSearchParams(location.search);
+      const type = p.get('type') ?? '';
+      const question = p.get('question') ?? '';
+      return {
+        q: p.get('q') ?? '',
+        type: validTypes.has(type) ? type : '',
+        question: validQuestions.has(question) ? question : '',
+        from: p.get('from') === 'talks' && fromBtn ? 'talks' : '',
+        topic: (p.get('topic') ?? '').trim(),
+        page: Math.max(1, parseInt(p.get('page') ?? '1', 10) || 1),
+      };
+    };
+
+    const writeUrl = (s: State, push: boolean) => {
+      const p = new URLSearchParams();
+      if (s.q) p.set('q', s.q);
+      if (s.type) p.set('type', s.type);
+      if (s.question) p.set('question', s.question);
+      if (s.from) p.set('from', s.from);
+      if (s.topic) p.set('topic', s.topic);
+      if (s.page > 1) p.set('page', String(s.page));
+      const url = `${location.pathname}${p.toString() ? `?${p}` : ''}`;
+      if (url === `${location.pathname}${location.search}`) return;
+      history[push ? 'pushState' : 'replaceState'](null, '', url);
+    };
+
+    let state = readUrl();
+
+    const render = () => {
+      search.value = state.q;
+      if (select) select.value = state.question;
+      typeButtons.forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.type ?? '') === state.type)));
+      fromBtn?.setAttribute('aria-pressed', String(state.from === 'talks'));
+      topicChip.hidden = !state.topic;
+      topicLabel.textContent = state.topic;
+      const topicKey = state.topic.toLowerCase();
+
+      const terms = state.q.normalize('NFC').toLowerCase().split(/\s+/).filter(Boolean);
+      const matches = index.map(
+        (item) =>
+          (!state.type || item.type === state.type) &&
+          (!state.question || item.questions.includes(state.question)) &&
+          (!state.from || item.talks) &&
+          (!topicKey || item.topics.includes(topicKey)) &&
+          terms.every((t) => item.text.includes(t)),
+      );
+      const total = matches.filter(Boolean).length;
+      const pages = Math.max(1, Math.ceil(total / PER_PAGE));
+      if (state.page > pages) state.page = pages;
+      const start = (state.page - 1) * PER_PAGE;
+
+      let n = 0;
+      rows.forEach((row, i) => {
+        const show = matches[i] && n >= start && n < start + PER_PAGE;
+        if (matches[i]) n++;
+        row.hidden = !show;
+      });
+
+      const filtered = Boolean(state.q || state.type || state.question || state.from || state.topic);
+      countEl.textContent = filtered ? `${total} ${total === 1 ? 'entry' : 'entries'} found` : `${total} entries`;
+      emptyEl.hidden = total !== 0;
+
+      pager.innerHTML = '';
+      pager.hidden = pages <= 1;
+      for (let i = 1; i <= pages; i++) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'btn';
+        b.textContent = String(i);
+        b.setAttribute('aria-label', `Page ${i}`);
+        if (i === state.page) b.setAttribute('aria-current', 'page'), b.setAttribute('aria-pressed', 'true');
+        b.addEventListener('click', () => {
+          state = { ...state, page: i };
+          writeUrl(state, true);
+          render();
+          list.scrollIntoView({ block: 'start' });
+        });
+        pager.append(b);
+      }
+    };
+
+    const update = (patch: Partial<State>, push: boolean) => {
+      state = { ...state, page: 1, ...patch };
+      writeUrl(state, push);
+      render();
+    };
+
+    let typing: number | undefined;
+    search.addEventListener('input', () => {
+      window.clearTimeout(typing);
+      typing = window.setTimeout(() => update({ q: search.value.trim() }, false), 150);
+    });
+    form.addEventListener('submit', (e) => e.preventDefault());
+    select?.addEventListener('change', () => update({ question: select.value }, true));
+    fromBtn?.addEventListener('click', () => update({ from: state.from ? '' : 'talks' }, true));
+    form.querySelector('[data-topic-clear]')?.addEventListener('click', () => update({ topic: '' }, true));
+    typeButtons.forEach((b) => b.addEventListener('click', () => update({ type: b.dataset.type ?? '' }, true)));
+    document.querySelector('[data-reset]')?.addEventListener('click', () => update({ q: '', type: '', question: '', from: '', topic: '' }, true));
+    window.addEventListener('popstate', () => {
+      state = readUrl();
+      render();
+    });
+
+    form.hidden = false;
+    render();
+  }
+</script>

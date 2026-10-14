@@ -1,0 +1,11 @@
+---
+import type { ItemState } from '../lib/content';
+
+interface Props {
+  state: ItemState;
+}
+const { state } = Astro.props;
+---
+
+{state === 'draft' && <span class="badge badge--draft">Draft · local only</span>}
+{state === 'scheduled' && <span class="badge badge--draft">Scheduled</span>}

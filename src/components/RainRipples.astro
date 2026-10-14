@@ -1,0 +1,343 @@
+---
+/**
+ * Rain on slow-moving water, in the same soft, painterly style as "The current flow":
+ * a soft aqua current that runs gently across the picture, with drifting bands of light,
+ * long faint streaks moving downstream, white glints, and raindrops whose rings spread
+ * and are carried a little way by the current before they fade.
+ * Decorative only. With "Pause motion" or reduced motion it rests as a still image.
+ */
+const uid = `rr${Math.random().toString(36).slice(2, 8)}`;
+
+const CX = 380;
+const CY = 470;
+
+// Where drops land on the pool (x, y in the 600×720 box), with timing.
+const drops = [
+  { x: 330, y: 400, dur: 5.6, delay: 0 },
+  { x: 470, y: 480, dur: 6.4, delay: 1.3 },
+  { x: 270, y: 505, dur: 5.9, delay: 2.4 },
+  { x: 410, y: 545, dur: 6.8, delay: 3.6 },
+  { x: 540, y: 420, dur: 6.1, delay: 4.5 },
+  { x: 220, y: 430, dur: 7.0, delay: 5.3 },
+];
+const fall = 250;
+
+// soft bands of light inside the pool, drawn one period wider than needed so the drift loops
+const P = 300;
+const band = (base: number, thick: number, amp: number, ph: number) => {
+  const top: string[] = [];
+  const bot: string[] = [];
+  for (let x = 0; x <= 760 + P; x += 30) {
+    const t = (x / P) * Math.PI * 2;
+    top.push(`${x} ${(base + amp * Math.sin(t + ph)).toFixed(1)}`);
+    bot.push(`${x} ${(base + thick + amp * 0.8 * Math.sin(t + ph + 0.9)).toFixed(1)}`);
+  }
+  return `M${top.join(' L')} L${bot.reverse().join(' L')} Z`;
+};
+const bands = [
+  { d: band(330, 60, 14, 0.4), cls: 'rr-band--white', dur: 26 },
+  { d: band(420, 80, 16, 2.1), cls: 'rr-band--deep', dur: 34 },
+  { d: band(520, 50, 12, 4.0), cls: 'rr-band--white', dur: 22 },
+];
+// the stream's banks: gently meandering edges (in the stream's own, slightly tilted frame)
+const bank = (base: number, amp: number, ph: number) => {
+  const pts: string[] = [];
+  for (let x = -40; x <= 800; x += 40) pts.push(`${x} ${(base + amp * Math.sin(x / 140 + ph)).toFixed(1)}`);
+  return pts;
+};
+const stream = (() => {
+  const top = bank(345, 18, 0.3);
+  const bot = bank(600, 22, 1.7).reverse();
+  return `M${top.join(' L')} L${bot.join(' L')} Z`;
+})();
+
+// long faint streaks travelling downstream (dash moves along a wavy line)
+const streak = (base: number, amp: number, ph: number) => {
+  const pts: string[] = [];
+  for (let x = -40; x <= 800; x += 20) pts.push(`${x} ${(base + amp * Math.sin(x / 110 + ph)).toFixed(1)}`);
+  return `M${pts.join(' L')}`;
+};
+const streaks = [
+  { d: streak(395, 7, 0.2), dur: 9, delay: 0, w: 2.4 },
+  { d: streak(455, 9, 1.4), dur: 12, delay: 4, w: 1.8 },
+  { d: streak(500, 6, 2.6), dur: 10, delay: 2, w: 2.6 },
+  { d: streak(560, 8, 3.8), dur: 13, delay: 7, w: 1.6 },
+];
+
+const glints = [
+  [250, 395, 46],
+  [420, 440, 60],
+  [320, 520, 38],
+  [500, 500, 44],
+  [380, 580, 52],
+  [190, 470, 34],
+];
+---
+
+<div class="rain" aria-hidden="true">
+  <svg viewBox="0 0 600 720" preserveAspectRatio="xMidYMid meet" focusable="false">
+    <defs>
+      <radialGradient id={`${uid}-pool`} cx="0.5" cy="0.5" r="0.5">
+        <stop offset="0" style="stop-color: var(--hero-deep); stop-opacity: 0.55"></stop>
+        <stop offset="0.45" style="stop-color: var(--hero-sea); stop-opacity: 0.7"></stop>
+        <stop offset="1" style="stop-color: var(--hero-sea); stop-opacity: 0"></stop>
+      </radialGradient>
+      <radialGradient id={`${uid}-fade`} cx="0.5" cy="0.5" r="0.5">
+        <stop offset="0.55" stop-color="#fff" stop-opacity="1"></stop>
+        <stop offset="1" stop-color="#fff" stop-opacity="0"></stop>
+      </radialGradient>
+      <linearGradient id={`${uid}-water`} x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" style="stop-color: var(--hero-sea); stop-opacity: 0.35"></stop>
+        <stop offset="0.5" style="stop-color: var(--hero-deep); stop-opacity: 0.5"></stop>
+        <stop offset="1" style="stop-color: var(--hero-sea); stop-opacity: 0.3"></stop>
+      </linearGradient>
+      <!-- the current fades out at both ends instead of stopping at a hard edge -->
+      <linearGradient id={`${uid}-ends`} x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#fff" stop-opacity="0"></stop>
+        <stop offset="0.2" stop-color="#fff" stop-opacity="1"></stop>
+        <stop offset="0.8" stop-color="#fff" stop-opacity="1"></stop>
+        <stop offset="1" stop-color="#fff" stop-opacity="0"></stop>
+      </linearGradient>
+      <mask id={`${uid}-mask`}>
+        <rect x="-40" y="250" width="840" height="450" fill={`url(#${uid}-ends)`}></rect>
+      </mask>
+      <clipPath id={`${uid}-clip`}>
+        <path d={stream}></path>
+      </clipPath>
+      <filter id={`${uid}-banks`} x="-10%" y="-40%" width="120%" height="180%">
+        <feGaussianBlur stdDeviation="22"></feGaussianBlur>
+      </filter>
+      <filter id={`${uid}-streak`} x="-10%" y="-100%" width="120%" height="300%">
+        <feGaussianBlur stdDeviation="1.6"></feGaussianBlur>
+      </filter>
+      <filter id={`${uid}-soft`} x="-20%" y="-60%" width="140%" height="220%">
+        <feGaussianBlur stdDeviation="12"></feGaussianBlur>
+      </filter>
+      <filter id={`${uid}-ring`} x="-20%" y="-60%" width="140%" height="220%">
+        <feGaussianBlur stdDeviation="0.8"></feGaussianBlur>
+      </filter>
+    </defs>
+
+    <!-- the current: soft aqua water running gently across, with drifting light and streaks -->
+    <g transform={`rotate(6 ${CX} ${CY})`} mask={`url(#${uid}-mask)`}>
+      <path d={stream} fill={`url(#${uid}-water)`} filter={`url(#${uid}-banks)`}></path>
+      <ellipse cx={CX} cy={CY} rx="300" ry="120" fill={`url(#${uid}-pool)`} opacity="0.55" filter={`url(#${uid}-banks)`}></ellipse>
+      <g clip-path={`url(#${uid}-clip)`}>
+        <g filter={`url(#${uid}-soft)`}>
+          {bands.map((b) => <path class={`rr-band ${b.cls}`} d={b.d} style={`--dur:${b.dur}s`} />)}
+        </g>
+        <g filter={`url(#${uid}-streak)`}>
+          {streaks.map((t) => (
+            <path class="rr-streak" d={t.d} pathLength="1000" style={`--dur:${t.dur}s; --delay:-${t.delay}s; stroke-width:${t.w}`} />
+          ))}
+        </g>
+      </g>
+      <g class="rr-glints">
+        {glints.map(([x, y, w]) => <path class="rr-glint" d={`M${x} ${y} q ${w / 2} -${(w / 7).toFixed(1)} ${w} 0`} />)}
+      </g>
+    </g>
+
+    <!-- rain -->
+    <g filter={`url(#${uid}-ring)`}>
+      {
+        drops.map((d, i) => (
+          <g class="drop" style={`--dur:${d.dur}s; --delay:-${d.delay}s`}>
+            <line class="drop__fall" x1={d.x} y1={d.y - fall - 34} x2={d.x} y2={d.y - fall} style={`--fall:${fall}px`} />
+            <g class="drop__drift">
+            <ellipse class="drop__ring drop__ring--a" cx={d.x} cy={d.y} rx={i % 2 ? 46 : 70} ry={i % 2 ? 13 : 20} />
+            <ellipse class="drop__ring drop__ring--b" cx={d.x} cy={d.y} rx={i % 2 ? 22 : 34} ry={i % 2 ? 6 : 9.5} />
+            <circle class="drop__splash" cx={d.x} cy={d.y - 3} r="3" />
+            </g>
+          </g>
+        ))
+      }
+    </g>
+  </svg>
+</div>
+
+<style>
+  .rain svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .rr-band {
+    animation: rr-drift var(--dur) linear infinite;
+  }
+  .rr-band--white {
+    fill: #fff;
+    opacity: 0.55;
+  }
+  .rr-band--deep {
+    fill: var(--hero-deep);
+    opacity: 0.25;
+    animation-direction: reverse;
+  }
+
+  /* a long faint streak slides downstream along its line */
+  .rr-streak {
+    fill: none;
+    stroke: #fff;
+    stroke-linecap: round;
+    stroke-dasharray: 150 850;
+    opacity: 0.55;
+    animation: rr-stream var(--dur) linear infinite;
+    animation-delay: var(--delay);
+  }
+
+  @keyframes rr-stream {
+    from {
+      stroke-dashoffset: 1000;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* once a drop lands, the current carries its rings a little way downstream */
+  .drop__drift {
+    animation: drop-drift var(--dur) linear infinite;
+    animation-delay: var(--delay);
+  }
+
+  @keyframes drop-drift {
+    0%,
+    38% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(46px, 5px);
+    }
+  }
+
+  .rr-glints {
+    animation: rr-shimmer 7s ease-in-out infinite alternate;
+  }
+  .rr-glint {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    opacity: 0.75;
+  }
+
+  @keyframes rr-drift {
+    to {
+      transform: translateX(-300px);
+    }
+  }
+  @keyframes rr-shimmer {
+    from {
+      opacity: 0.55;
+      transform: translateX(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(6px);
+    }
+  }
+
+  /* white rain: a drop falls for the first part of the cycle, lands at 38%, then rings spread */
+  /* pale aqua while falling, so the drop shows against the white page above the pool */
+  .drop__fall {
+    stroke: var(--hero-sea);
+    stroke-opacity: 0.85;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    animation: drop-fall var(--dur) linear infinite;
+    animation-delay: var(--delay);
+  }
+
+  .drop__ring {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 1.8;
+    opacity: 0.75;
+    animation: drop-ring var(--dur) ease-out infinite;
+    animation-delay: var(--delay);
+  }
+
+  .drop__ring--b {
+    stroke-width: 1.4;
+    animation-name: drop-ring-b;
+  }
+
+  .drop__splash {
+    fill: #fff;
+    opacity: 0;
+    animation: drop-splash var(--dur) ease-out infinite;
+    animation-delay: var(--delay);
+  }
+
+  @keyframes drop-fall {
+    0% {
+      transform: translateY(0);
+      opacity: 0;
+    }
+    6% {
+      opacity: 1;
+    }
+    37% {
+      transform: translateY(var(--fall));
+      opacity: 1;
+    }
+    38%,
+    100% {
+      transform: translateY(var(--fall));
+      opacity: 0;
+    }
+  }
+
+  @keyframes drop-ring {
+    0%,
+    37% {
+      rx: 2px;
+      ry: 0.6px;
+      opacity: 0;
+    }
+    39% {
+      opacity: 1;
+    }
+    100% {
+      rx: 150px;
+      ry: 42px;
+      opacity: 0;
+    }
+  }
+
+  @keyframes drop-ring-b {
+    0%,
+    44% {
+      rx: 2px;
+      ry: 0.6px;
+      opacity: 0;
+    }
+    46% {
+      opacity: 0.9;
+    }
+    100% {
+      rx: 100px;
+      ry: 28px;
+      opacity: 0;
+    }
+  }
+
+  @keyframes drop-splash {
+    0%,
+    37% {
+      opacity: 0;
+      transform: translateY(0);
+    }
+    39% {
+      opacity: 0.95;
+      transform: translateY(-7px);
+    }
+    48%,
+    100% {
+      opacity: 0;
+      transform: translateY(0);
+    }
+  }
+</style>

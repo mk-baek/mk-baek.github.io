@@ -1,0 +1,44 @@
+---
+interface Props {
+  title: string;
+}
+const { title } = Astro.props;
+---
+
+<div class="share" data-share data-title={title}>
+  <button type="button" class="btn" data-share-btn>Copy link</button>
+  <span class="share__status meta" role="status" aria-live="polite" data-share-status></span>
+</div>
+
+<style>
+  .share {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+</style>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-share]')) {
+    const btn = root.querySelector<HTMLButtonElement>('[data-share-btn]')!;
+    const status = root.querySelector<HTMLElement>('[data-share-status]')!;
+    const canShare = typeof navigator.share === 'function' && window.matchMedia('(pointer: coarse)').matches;
+    if (canShare) btn.textContent = 'Share';
+    btn.addEventListener('click', async () => {
+      const url = location.href.split(/[?#]/)[0];
+      try {
+        if (canShare) {
+          await navigator.share({ title: root.dataset.title, url });
+          return;
+        }
+        await navigator.clipboard.writeText(url);
+        status.textContent = 'Link copied';
+      } catch (err) {
+        if ((err as Error).name === 'AbortError') return;
+        status.textContent = `Copy this link: ${url}`;
+      }
+      window.setTimeout(() => (status.textContent = ''), 4000);
+    });
+  }
+</script>

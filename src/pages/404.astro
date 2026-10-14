@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Page not found" noindex>
+  <div class="container measure nf">
+    <span class="annot">404 · lost in the current</span>
+    <h1>This page has drifted away.</h1>
+    <p>The address may have changed, or the page was never published.</p>
+    <p>
+      <a class="text-link" href="/journal/">Go to the Journal →</a>
+    </p>
+    <p>
+      <a class="text-link" href="/">Back to the home page</a>
+    </p>
+  </div>
+</Base>
+
+<style>
+  .nf {
+    padding: 64px 0;
+  }
+  .nf h1 {
+    font-size: var(--title-page);
+    font-weight: 420;
+    margin-bottom: 16px;
+  }
+  .nf p {
+    color: var(--ink-soft);
+  }
+</style>

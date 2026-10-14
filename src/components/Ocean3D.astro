@@ -1,0 +1,223 @@
+---
+/**
+ * Home hero: a real-time 3D sea seen from a low angle. Built with three.js, no external services.
+ *  - Loads after the page text (dynamic import), so the words appear first.
+ *  - Paused when off-screen, when "Pause motion" is on, or when the tab is hidden.
+ *  - prefers-reduced-motion → a single still frame.
+ *  - Without WebGL the CSS gradient behind it remains.
+ * Decorative only.
+ */
+---
+
+<div class="ocean" data-ocean aria-hidden="true">
+  <canvas class="ocean__canvas"></canvas>
+</div>
+
+<style>
+  .ocean {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 0%, var(--hero-horizon) 46%, var(--hero-sea) 100%);
+  }
+
+  .ocean__canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+
+  .ocean.is-ready .ocean__canvas {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-ocean]');
+  const canvas = root?.querySelector<HTMLCanvasElement>('canvas');
+
+  const supportsWebGL = () => {
+    try {
+      const c = document.createElement('canvas');
+      return Boolean(c.getContext('webgl2') || c.getContext('webgl'));
+    } catch {
+      return false;
+    }
+  };
+
+  if (root && canvas && supportsWebGL()) {
+    const start = () => import('three').then((THREE) => init(THREE, root, canvas));
+    if ('requestIdleCallback' in window) requestIdleCallback(start, { timeout: 1200 });
+    else setTimeout(start, 200);
+  }
+
+  function init(THREE: typeof import('three'), root: HTMLElement, canvas: HTMLCanvasElement) {
+    const css = getComputedStyle(root);
+    const color = (name: string, fallback: string) => new THREE.Color(css.getPropertyValue(name).trim() || fallback);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'low-power' });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, window.innerWidth < 768 ? 1.5 : 2));
+    renderer.setClearColor(0x000000, 0);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 120);
+
+    // Sum of a few sine waves: slow swell plus smaller ripples.
+    const WAVES = /* glsl */ `
+      float wave(vec2 p, float t) {
+        return 0.15 * sin(p.x * 0.32 + t * 0.55)
+             + 0.10 * sin(p.y * 0.48 + p.x * 0.18 - t * 0.75)
+             + 0.06 * sin((p.x + p.y) * 1.05 + t * 1.25)
+             + 0.03 * sin(p.x * 2.3 - p.y * 1.7 + t * 1.9);
+      }`;
+
+    const uniforms = {
+      uTime: { value: 0 },
+      uDeep: { value: color('--hero-deep', '#173a52') },
+      uShallow: { value: color('--hero-sea', '#5d8ea3') },
+      uSky: { value: color('--hero-sky', '#e9f0f3') },
+      uHorizon: { value: color('--hero-horizon', '#d6e3e9') },
+      uCam: { value: new THREE.Vector3() },
+    };
+
+    // --- sea surface ---
+    const seaGeo = new THREE.PlaneGeometry(90, 70, 220, 170);
+    seaGeo.rotateX(-Math.PI / 2);
+    const sea = new THREE.Mesh(
+      seaGeo,
+      new THREE.ShaderMaterial({
+        uniforms,
+        vertexShader: /* glsl */ `
+          uniform float uTime;
+          varying vec3 vWorld;
+          varying vec3 vNormal;
+          varying float vH;
+          ${WAVES}
+          void main() {
+            vec3 p = position;
+            float h = wave(p.xz, uTime);
+            float e = 0.06;
+            float hx = wave(p.xz + vec2(e, 0.0), uTime);
+            float hz = wave(p.xz + vec2(0.0, e), uTime);
+            vNormal = normalize(vec3(h - hx, e, h - hz));
+            p.y = h;
+            vH = h;
+            vec4 world = modelMatrix * vec4(p, 1.0);
+            vWorld = world.xyz;
+            gl_Position = projectionMatrix * viewMatrix * world;
+          }`,
+        fragmentShader: /* glsl */ `
+          uniform vec3 uDeep, uShallow, uSky, uHorizon, uCam;
+          varying vec3 vWorld;
+          varying vec3 vNormal;
+          varying float vH;
+          void main() {
+            vec3 N = normalize(vNormal);
+            vec3 V = normalize(uCam - vWorld);
+            vec3 L = normalize(vec3(-0.35, 0.55, -1.0));
+            float fresnel = pow(1.0 - max(dot(N, V), 0.0), 3.0);
+            vec3 base = mix(uDeep, uShallow, clamp(vH * 1.8 + 0.62, 0.0, 1.0));
+            // clear water: light passes through, so troughs stay bright instead of turning murky
+            float lambert = clamp(dot(N, normalize(vec3(-0.2, 1.0, -0.4))), 0.0, 1.0);
+            base *= 0.86 + 0.24 * lambert;
+            vec3 col = mix(base, uSky, fresnel * 0.6);
+            col = mix(col, vec3(1.0), 0.06);
+            float spec = pow(max(dot(reflect(-L, N), V), 0.0), 90.0);
+            col += vec3(1.0) * spec * 0.8;
+            float fog = smoothstep(9.0, 34.0, length(vWorld - uCam));
+            col = mix(col, uHorizon, fog);
+            gl_FragColor = vec4(col, 1.0);
+          }`,
+      }),
+    );
+    scene.add(sea);
+
+
+    // --- camera, sizing, pointer parallax ---
+    const target = { x: 0, y: 0 };
+    const look = new THREE.Vector3(0, 0.7, -12);
+    const resize = () => {
+      const w = root.clientWidth;
+      const h = root.clientHeight;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.position.set(0, 1.4, 7);
+      // Tilt so the horizon sits just below the hero text (measured, so it works at any screen size).
+      // horizon offset from centre = pitch / (fov / 2) × 50%
+      const text = root.parentElement?.querySelector<HTMLElement>('.hero__text');
+      const textBottom = text ? text.offsetTop + text.offsetHeight : h * 0.5;
+      const horizonFromTop = Math.min(0.78, Math.max(0.38, (textBottom + (w < 768 ? 28 : 48)) / h));
+      const pitchDeg = (0.5 - horizonFromTop) * 2 * (camera.fov / 2);
+      look.y = camera.position.y + 19 * Math.tan((-pitchDeg * Math.PI) / 180);
+      camera.updateProjectionMatrix();
+    };
+    resize();
+    const ro = new ResizeObserver(() => {
+      resize();
+      frame();
+    });
+    ro.observe(root);
+    const heroText = root.parentElement?.querySelector<HTMLElement>('.hero__text');
+    if (heroText) ro.observe(heroText);
+    document.fonts?.ready.then(() => {
+      resize();
+      frame();
+    });
+
+    window.addEventListener(
+      'pointermove',
+      (e) => {
+        target.x = (e.clientX / window.innerWidth - 0.5) * 2;
+        target.y = (e.clientY / window.innerHeight - 0.5) * 2;
+      },
+      { passive: true },
+    );
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const clock = new THREE.Timer();
+    let elapsed = 6;
+    let visible = true;
+    let running = false;
+
+    const frame = () => {
+      uniforms.uTime.value = elapsed;
+      camera.position.x += (target.x * 0.6 - camera.position.x) * 0.03;
+      camera.lookAt(look.x + camera.position.x * 0.4, look.y - target.y * 0.15, look.z);
+      uniforms.uCam.value.copy(camera.position);
+      renderer.render(scene, camera);
+    };
+
+    const shouldRun = () =>
+      !reduced && visible && !document.hidden && !document.documentElement.classList.contains('motion-paused');
+
+    const loop = () => {
+      if (!shouldRun()) {
+        running = false;
+        return;
+      }
+      clock.update();
+      elapsed += Math.min(clock.getDelta(), 0.05);
+      frame();
+      requestAnimationFrame(loop);
+    };
+
+    const wake = () => {
+      if (running || !shouldRun()) return;
+      running = true;
+      clock.update();
+      requestAnimationFrame(loop);
+    };
+
+    new IntersectionObserver((entries) => {
+      visible = entries[0].isIntersecting;
+      wake();
+    }).observe(root);
+    document.addEventListener('visibilitychange', wake);
+    new MutationObserver(wake).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+    frame(); // first still frame (also the only frame with reduced motion)
+    root.classList.add('is-ready');
+    wake();
+  }
+</script>

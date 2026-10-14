@@ -1,0 +1,25 @@
+---
+import { entryState, showsDate, typeLabel, type Entry } from '../lib/content';
+import { formatDate, isoDay } from '../lib/dates';
+import StateBadge from './StateBadge.astro';
+
+interface Props {
+  entry: Entry;
+  /** Replaces the summary line (e.g. a relation label). */
+  note?: string;
+  headingLevel?: 'h2' | 'h3';
+}
+const { entry, note, headingLevel = 'h3' } = Astro.props;
+const H = headingLevel;
+const d = entry.data;
+---
+
+<li lang={d.lang === 'ko' ? 'ko' : undefined}>
+  <p class="meta">
+    <span>{typeLabel[d.type]}</span>
+    {d.publishedAt && showsDate(entry) && <time datetime={isoDay(d.publishedAt)}>{formatDate(d.publishedAt)}</time>}
+    {d.lang === 'ko' && <span lang="en">KO</span>}
+  </p>
+  <H><a href={`/journal/${entry.id}/`}>{d.title}</a> <StateBadge state={entryState(entry)} /></H>
+  <p>{note ?? d.summary}</p>
+</li>

@@ -1,0 +1,148 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../site';
+import LightStream from '../components/LightStream.astro';
+import Tide from '../components/Tide.astro';
+
+const { why } = SITE;
+
+// **word** in the About copy is set in bold; everything else is plain text.
+const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const rich = (s: string) => escape(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+---
+
+<Base title={why.title} description={SITE.description}>
+  <div class="container about">
+    <div class="about__intro">
+      <header class="page-head about__head">
+        <span class="annot">about</span>
+        <h1>{why.title}</h1>
+      </header>
+
+      <div class="about__lead prose">
+        {why.paragraphs.map((p, i) => (i === 0 ? <p class="about__first">{p}</p> : <p set:html={rich(p)} />))}
+      </div>
+
+      <div class="about__art about__art--flat">
+        <LightStream height={200} />
+      </div>
+      <div class="about__art about__art--rising">
+        <Tide />
+      </div>
+    </div>
+
+    <section aria-labelledby="meanings-title" class="meanings">
+      <h2 id="meanings-title" class="visually-hidden">{why.meaningsIntro}</h2>
+      <ol>
+        {
+          why.meanings.map((m, i) => (
+            <li>
+              <span class="meanings__no" aria-hidden="true">
+                0{i + 1}
+              </span>
+              <h3>{m.word}</h3>
+              <p>{m.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+  </div>
+</Base>
+
+<style>
+  .about__first {
+    font-family: var(--font-serif);
+    font-size: var(--title-lead);
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--deep);
+    margin-bottom: 1em;
+  }
+
+  .about__head h1 {
+  }
+
+  .about__intro {
+    position: relative;
+  }
+
+  .about__head,
+  .about__lead {
+    position: relative;
+    z-index: 1;
+  }
+
+  .about__art--flat {
+    margin: 48px calc(var(--gutter) * -1);
+  }
+
+  .about__art--rising {
+    display: none;
+  }
+
+  /* wide screens: the stream winds up through the empty space on the right */
+  @media (min-width: 1000px) {
+    .about__intro {
+      padding-bottom: 64px;
+    }
+
+    .about__art--flat {
+      display: none;
+    }
+
+    .about__art--rising {
+      display: block;
+      position: absolute;
+      z-index: 0;
+      right: -3%;
+      top: 4%;
+      bottom: 0;
+      width: 48%;
+      pointer-events: none;
+    }
+  }
+
+  .meanings ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 36px;
+  }
+
+  @media (min-width: 800px) {
+    .meanings ol {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 40px;
+    }
+  }
+
+  .meanings li {
+    border-top: 1px solid var(--sea-mid);
+    padding-top: 22px;
+  }
+
+  .meanings__no {
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--ink-soft);
+  }
+
+  .meanings h3 {
+    font-size: clamp(30px, 4vw, 44px);
+    font-variation-settings: 'opsz' 144;
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    font-style: italic;
+    margin: 6px 0 12px;
+  }
+
+  .meanings p {
+    color: var(--ink-soft);
+    max-width: 24em;
+    margin: 0;
+  }
+
+</style>

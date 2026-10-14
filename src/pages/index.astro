@@ -1,0 +1,345 @@
+---
+import Base from '../layouts/Base.astro';
+import Ocean3D from '../components/Ocean3D.astro';
+import Currents from '../components/Currents.astro';
+import KeywordStream from '../components/KeywordStream.astro';
+import StateBadge from '../components/StateBadge.astro';
+import { getSite, keywordStream, latestFlow } from '../lib/content';
+import { flowSvg } from '../lib/art.mjs';
+import { formatDate, isoDay } from '../lib/dates';
+import { SITE } from '../site';
+
+const site = await getSite();
+
+// Topics my writing keeps returning to — recalculated on every build.
+const keywords = keywordStream(site);
+
+// The current flow: the 4 most recently published or updated items, Journal and Library together.
+const flow = latestFlow(site, 2);
+const [lead, ...side] = flow;
+// The current flow always opens with the flow graphic (Library items show their preview image on top).
+const leadArt = lead ? flowSvg(lead.id) : '';
+
+---
+
+<Base>
+  <section class="hero" aria-labelledby="hero-title">
+    <Ocean3D />
+    <div class="hero__text container">
+      <h1 id="hero-title">
+        {SITE.hero.headline.map((line) => <span class="hero__line">{line}</span>)}
+      </h1>
+      <p class="hero__intro">{SITE.hero.lead}</p>
+      <a class="hero__cta" href={SITE.hero.ctaHref}>{SITE.hero.cta} <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="hero__stream container">
+      <KeywordStream keywords={keywords} />
+    </div>
+  </section>
+
+  <section class="section container why" aria-labelledby="why-title">
+    <div class="why__head">
+      <span class="annot" aria-hidden="true"></span>
+      <h2 class="why__title display-face" id="why-title">{SITE.homeAbout.title}</h2>
+    </div>
+    <div class="why__body">
+      <p class="why__first">{SITE.homeAbout.lead}</p>
+      <p>{SITE.homeAbout.text}</p>
+      <a class="text-link" href="/about/">{SITE.homeAbout.link} →</a>
+    </div>
+  </section>
+
+  <div class="container section">
+    <Currents entries={site.entries.length} library={site.library.length} />
+  </div>
+
+  {
+    flow.length === 0 ? (
+      <section class="section container">
+        <p class="empty">
+          <span class="annot">the first entries are on their way</span>
+        </p>
+      </section>
+    ) : (
+      <section class="section container" aria-labelledby="flow-title">
+        <div class="section-head">
+          <h2 class="section-title display-face" id="flow-title">
+            The Current Flow
+          </h2>
+          <span class="annot">what I’m reading and thinking about now</span>
+        </div>
+        <div class="flow">
+          {lead && (
+            <article class="flow__lead" lang={lead.lang === 'ko' ? 'ko' : undefined}>
+              <a
+                class="flow__art"
+                href={lead.href}
+                tabindex="-1"
+                aria-hidden="true"
+                {...(lead.external ? { rel: 'noopener', target: '_blank' } : {})}
+              >
+                <span class="flow__art-fill" set:html={leadArt} />
+                {lead.image && (
+                  <img src={lead.image} alt="" loading="lazy" referrerpolicy="no-referrer" data-preview-img />
+                )}
+              </a>
+              <p class="meta">
+                <span class="type">{lead.label}</span>
+                {lead.date && lead.showDate && (
+                  <time datetime={isoDay(lead.date)}>
+                    {lead.dateLabel && `${lead.dateLabel} `}
+                    {formatDate(lead.date)}
+                  </time>
+                )}
+              </p>
+              <h3>
+                <a href={lead.href} {...(lead.external ? { rel: 'noopener', target: '_blank' } : {})}>
+                  {lead.title}
+                  {lead.external && ' ↗'}
+                </a>{' '}
+                <StateBadge state={lead.state} />
+              </h3>
+              <p class="flow__summary">{lead.summary}</p>
+            </article>
+          )}
+          {side.length > 0 && (
+            <ul class="flow__side entry-list">
+              {side.map((it) => (
+                <li lang={it.lang === 'ko' ? 'ko' : undefined}>
+                  <p class="meta">
+                    <span class="type">{it.label}</span>
+                    {it.date && it.showDate && <time datetime={isoDay(it.date)}>{formatDate(it.date)}</time>}
+                  </p>
+                  <h3>
+                    <a href={it.href} {...(it.external ? { rel: 'noopener', target: '_blank' } : {})}>
+                      {it.title}
+                      {it.external && ' ↗'}
+                    </a>{' '}
+                    <StateBadge state={it.state} />
+                  </h3>
+                  <p>{it.summary}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        <p class="flow__more">
+          <a class="text-link" href="/journal/">All Journal entries →</a>
+          <a class="text-link" href="/library/">The whole Library →</a>
+        </p>
+      </section>
+    )
+  }
+
+</Base>
+
+<script>
+  // A broken Library preview image falls back to the generated art underneath.
+  for (const img of document.querySelectorAll<HTMLImageElement>('[data-preview-img]')) {
+    if (img.complete && img.naturalWidth === 0) img.remove();
+    else img.addEventListener('error', () => img.remove());
+  }
+</script>
+
+<style>
+  .hero {
+    --header-h: 136px;
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    /* height follows the content: text, then a band of sea (not the whole screen) */
+    background: linear-gradient(180deg, var(--hero-sky) 0%, var(--hero-horizon) 58%);
+    overflow: hidden;
+  }
+
+  @media (min-width: 560px) {
+    .hero {
+      --header-h: 90px;
+    }
+  }
+
+  .hero__text {
+    position: relative;
+    z-index: 1;
+    /* the space between the logo (its bottom sits ~67px down) and the headline, doubled */
+    padding-top: calc(67px + 2 * (var(--header-h) - 67px + clamp(28px, 6vh, 88px)));
+  }
+
+  .hero h1 {
+    font-size: clamp(34px, 5.8vw, 82px);
+    font-weight: 400;
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+    margin-bottom: 28px;
+  }
+
+  .hero__line {
+    display: block;
+  }
+
+  .hero__line + .hero__line {
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .hero__intro {
+    font-size: clamp(17px, 1.5vw, 20px);
+    color: var(--ink);
+    max-width: 30em;
+    opacity: 0.85;
+    margin-bottom: 30px;
+  }
+
+  .hero__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 10px 24px;
+    border-radius: 999px;
+    background: var(--deep);
+    color: var(--paper);
+    font-size: 16px;
+    text-decoration: none;
+    transition: background var(--ease), transform var(--ease);
+  }
+
+  .hero__cta:hover,
+  .hero__cta:focus-visible {
+    background: var(--accent);
+    transform: translateX(2px);
+  }
+
+  .hero__stream {
+    position: relative;
+    z-index: 1;
+    /* sits just under the horizon, with a little more sea below it */
+    margin-top: clamp(96px, 13vh, 150px);
+    padding-bottom: clamp(56px, 8vh, 96px);
+    --deep: #ffffff;
+    --ink-soft: rgb(255 255 255 / 0.8);
+    --accent: #ffffff;
+    text-shadow: 0 1px 10px rgb(0 40 50 / 0.35);
+  }
+
+  .hero__stream :global(.annot) {
+    color: #fff;
+  }
+
+  .hero__stream :global(.annot::before) {
+    filter: brightness(0) invert(1);
+  }
+
+  .empty {
+    text-align: center;
+  }
+
+  .flow {
+    display: grid;
+    gap: 24px;
+  }
+
+  .flow__art {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 9;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 22px;
+    background: var(--sea-soft);
+  }
+
+  .flow__art-fill,
+  .flow__art img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .flow__art img {
+    object-fit: cover;
+  }
+
+  .flow__more {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 28px;
+    margin: 36px 0 0;
+  }
+
+  .flow__lead h3 {
+    font-size: clamp(30px, 5vw, 48px);
+    font-weight: 300;
+    line-height: 1.15;
+    margin: 10px 0 16px;
+  }
+
+  .flow__lead h3 a {
+    color: var(--deep);
+    text-decoration: none;
+  }
+
+  .flow__lead h3 a:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+  }
+
+  .flow__summary {
+    color: var(--ink-soft);
+    max-width: 44em;
+  }
+
+  .flow__side h3 {
+    font-size: 22px;
+  }
+
+  @media (min-width: 900px) {
+    .flow {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 0 24px;
+    }
+    .flow__lead {
+      grid-column: 1 / span 7;
+    }
+    .flow__side {
+      grid-column: 9 / span 4;
+    }
+  }
+
+  .why {
+    display: grid;
+    gap: 12px 48px;
+  }
+
+  @media (min-width: 900px) {
+    .why {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+      align-items: start;
+    }
+  }
+
+  #flow-title {
+    font-size: var(--title-page);
+    font-weight: 400;
+  }
+
+  .why__title {
+    font-size: var(--title-page);
+    margin-top: 10px;
+  }
+
+  .why__body {
+    max-width: 38em;
+  }
+
+  .why__first {
+    font-family: var(--font-serif);
+    font-size: var(--title-lead);
+    line-height: 1.3;
+    color: var(--deep);
+    font-weight: 400;
+  }
+
+</style>

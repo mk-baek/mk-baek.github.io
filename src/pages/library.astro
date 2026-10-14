@@ -1,0 +1,269 @@
+---
+import Base from '../layouts/Base.astro';
+import StateBadge from '../components/StateBadge.astro';
+import { getSite, libraryByYear, libraryCard, libraryKindLabel, libraryState, type LibraryItem } from '../lib/content';
+import { sceneSvg } from '../lib/art.mjs';
+import { formatDate, isoDay } from '../lib/dates';
+
+const site = await getSite();
+// Newest publication first, oldest last (see libraryByYear).
+const items = libraryByYear(site.library);
+const kinds = (Object.keys(libraryKindLabel) as LibraryItem['data']['kind'][]).filter((k) =>
+  items.some((i) => i.data.kind === k),
+);
+const cards = items.map((item) => ({ item, card: libraryCard(item), fallback: sceneSvg('', item.id) }));
+---
+
+<Base title="Library" description="Books, reports, and articles I recommend. Links go to the original source.">
+  <div class="container">
+    <header class="page-head measure">
+      <span class="annot">what informs me</span>
+      <h1>Library</h1>
+      <p>Books, reports, and articles I recommend. Links go to the original source.</p>
+    </header>
+
+    {
+      items.length === 0 ? (
+        <p class="empty">The first picks are on their way.</p>
+      ) : (
+        <>
+          {kinds.length > 1 && (
+            <div class="kinds" role="group" aria-label="Kind" data-kinds hidden>
+              <button type="button" class="btn" data-kind="" aria-pressed="true">
+                All
+              </button>
+              {kinds.map((k) => (
+                <button type="button" class="btn" data-kind={k} aria-pressed="false">
+                  {libraryKindLabel[k]}s
+                </button>
+              ))}
+            </div>
+          )}
+
+          <ul class="shelf" data-shelf>
+            {cards.map(({ item, card, fallback }) => (
+              <li data-kind={item.data.kind} lang={item.data.lang === 'ko' ? 'ko' : undefined}>
+                <article class="card">
+                  <a class="card__media" href={item.data.url} rel="noopener" target="_blank" tabindex="-1" aria-hidden="true">
+                    <span class="card__fallback" set:html={fallback} />
+                    {card.image && (
+                      <img
+                        src={card.image}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        referrerpolicy="no-referrer"
+                        data-preview-img
+                      />
+                    )}
+                  </a>
+                  <div class="card__body">
+                    <p class="meta">
+                      <span class="type">{libraryKindLabel[item.data.kind]}</span>
+                      <span>{card.site}</span>
+                      {item.data.year && <span>{item.data.year}</span>}
+                    </p>
+                    <h2>
+                      <a href={item.data.url} rel="noopener" target="_blank">
+                        {card.title}
+                        <span class="visually-hidden"> (opens the original in a new tab)</span>
+                      </a>{' '}
+                      <StateBadge state={libraryState(item)} />
+                    </h2>
+                    {item.data.author && <p class="card__author">{item.data.author}</p>}
+                    <p class="card__why">
+                      <span class="annot">why</span> {item.data.why}
+                    </p>
+                    {card.description && <p class="card__desc">{card.description}</p>}
+                    <p class="card__foot meta">
+                      <span>{card.host}</span>
+                      {item.data.addedAt && (
+                        <span>
+                          Added <time datetime={isoDay(item.data.addedAt)}>{formatDate(item.data.addedAt)}</time>
+                        </span>
+                      )}
+                      {item.data.archiveUrl && (
+                        <a href={item.data.archiveUrl} rel="noopener" target="_blank">
+                          Archived copy
+                        </a>
+                      )}
+                    </p>
+                  </div>
+                </article>
+              </li>
+            ))}
+          </ul>
+        </>
+      )
+    }
+  </div>
+</Base>
+
+<style>
+  .empty {
+    color: var(--ink-soft);
+  }
+
+  .kinds {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 28px;
+  }
+
+  .shelf {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 28px;
+  }
+
+  @media (min-width: 700px) {
+    .shelf {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .shelf {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    border: 1px solid var(--sea-mid);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color var(--ease), transform var(--ease);
+  }
+
+  .card:hover,
+  .card:focus-within {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .card__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 1.91 / 1;
+    background: var(--sea-soft);
+    overflow: hidden;
+  }
+
+  .card__fallback,
+  .card__media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .card__media img {
+    object-fit: cover;
+  }
+
+  /* book covers are tall: show the whole cover on a soft background instead of cropping it */
+  li[data-kind='book'] .card__media img {
+    object-fit: contain;
+    padding: 14px 0;
+    background: var(--sea-soft);
+  }
+
+  .card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 18px 20px 20px;
+    flex: 1;
+  }
+
+  .card h2 {
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.3;
+  }
+
+  .card h2 a {
+    color: var(--deep);
+    text-decoration: none;
+  }
+
+  .card h2 a:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+  }
+
+  .card__author {
+    margin: 0;
+    font-size: 15px;
+    color: var(--ink-soft);
+  }
+
+  .card__why {
+    margin: 4px 0 0;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .card__why .annot {
+    font-size: 15px;
+    margin-right: 4px;
+  }
+
+  .card__desc {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card__foot {
+    margin-top: auto;
+    padding-top: 8px;
+  }
+</style>
+
+<script>
+  // A broken preview image falls back to the generated art underneath.
+  for (const img of document.querySelectorAll<HTMLImageElement>('[data-preview-img]')) {
+    const hide = () => img.remove();
+    if (img.complete && img.naturalWidth === 0) hide();
+    else img.addEventListener('error', hide);
+  }
+
+  // Kind filter (books / reports / articles …), kept in the address as ?kind=
+  const group = document.querySelector<HTMLElement>('[data-kinds]');
+  const shelf = document.querySelector<HTMLElement>('[data-shelf]');
+  if (group && shelf) {
+    const buttons = Array.from(group.querySelectorAll<HTMLButtonElement>('[data-kind]'));
+    const valid = new Set(buttons.map((b) => b.dataset.kind));
+    const apply = (kind: string) => {
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.kind ?? '') === kind)));
+      for (const li of Array.from(shelf.children) as HTMLElement[]) li.hidden = Boolean(kind) && li.dataset.kind !== kind;
+    };
+    const fromUrl = () => {
+      const k = new URLSearchParams(location.search).get('kind') ?? '';
+      return valid.has(k) ? k : '';
+    };
+    buttons.forEach((b) =>
+      b.addEventListener('click', () => {
+        const kind = b.dataset.kind ?? '';
+        history.pushState(null, '', kind ? `?kind=${kind}` : location.pathname);
+        apply(kind);
+      }),
+    );
+    window.addEventListener('popstate', () => apply(fromUrl()));
+    group.hidden = false;
+    apply(fromUrl());
+  }
+</script>

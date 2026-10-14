@@ -1,0 +1,42 @@
+---
+/**
+ * Full-width illustrated opening for an entry, project or question.
+ * The art is generated from `seed`; the words stay real text (selectable, readable by screen readers).
+ * If `options.quote` is set, the quote is set large and the page title is rendered by the caller below.
+ */
+import { sceneSvg } from '../lib/art.mjs';
+import type { SpreadOptions } from '../lib/content';
+
+interface Props {
+  seed: string;
+  options: SpreadOptions;
+  /** Used as the large text (as the page <h1>) when there is no quote. */
+  title: string;
+  lang?: 'en' | 'ko';
+}
+
+const { seed, options, title, lang } = Astro.props;
+const art = sceneSvg(options.scene ?? '', seed);
+const isKo = lang === 'ko';
+---
+
+<figure class:list={['spread', 'spread--head', `spread--${options.tone}`, `spread--${options.place}`]} data-spread>
+  <div class="spread__art" set:html={art} />
+  <div class="spread__text">
+    <div class="spread__kicker" lang="en"><slot name="kicker" /></div>
+    {
+      options.quote ? (
+        <blockquote class="spread__quote" lang={isKo ? 'ko' : undefined}>
+          <p>“{options.quote}”</p>
+        </blockquote>
+      ) : (
+        <h1 class="spread__quote spread__title" lang={isKo ? 'ko' : undefined}>
+          {title}
+        </h1>
+      )
+    }
+    {options.quote && options.attribution && <figcaption class="spread__by">{options.attribution}</figcaption>}
+    <slot />
+  </div>
+  <button type="button" class="spread__save" data-spread-save>Save as image</button>
+</figure>

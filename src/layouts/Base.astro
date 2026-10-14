@@ -1,0 +1,359 @@
+---
+import '../styles/global.css';
+import Atmosphere from '../components/Atmosphere.astro';
+import SpreadExport from '../components/SpreadExport.astro';
+import LightStream from '../components/LightStream.astro';
+import { SITE } from '../site';
+import { isLocalPreview } from '../lib/content';
+
+interface Props {
+  title?: string;
+  description?: string;
+  type?: 'website' | 'article';
+  noindex?: boolean;
+  publishedAt?: string;
+}
+
+const {
+  title,
+  description = SITE.description,
+  type = 'website',
+  noindex = false,
+  publishedAt,
+} = Astro.props;
+const fullTitle = title ? `${title} — ${SITE.name}` : `${SITE.name} — by ${SITE.author}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const path = Astro.url.pathname;
+const nav = [
+  { href: '/about/', label: 'About' },
+  { href: '/journal/', label: 'Journal' },
+  { href: '/library/', label: 'Library' },
+  { href: '/connect/', label: 'Connect' },
+];
+const isCurrent = (href: string) => path === href || path.startsWith(href) || path === href.slice(0, -1);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={title ?? SITE.name} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    {publishedAt && <meta property="article:published_time" content={publishedAt} />}
+    <meta name="author" content={SITE.author} />
+    <meta name="theme-color" content="#fcfcfa" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a1f29" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap.xml" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..500&display=swap"
+    />
+    <script is:inline>
+      try {
+        if (localStorage.getItem('the-current:motion') === 'off') document.documentElement.classList.add('motion-paused');
+      } catch (e) {}
+    </script>
+  </head>
+  <body class:list={[{ 'has-hero': Astro.url.pathname === '/' }]}>
+    <Atmosphere />
+    <a class="skip-link" href="#main">Skip to content</a>
+    {
+      isLocalPreview && (
+        <div class="preview-bar" role="note">
+          Local preview — drafts and scheduled items are visible here and marked. The public site shows published items only.
+        </div>
+      )
+    }
+    <header class="site-header container">
+      <a class="wordmark" href="/" aria-label={`${SITE.name}, by ${SITE.author} — home`}>
+        <svg class="wordmark__mark" viewBox="0 0 40 26" aria-hidden="true" focusable="false">
+          <path d="M2 6 C 12 2, 22 10, 38 5" />
+          <path class="wordmark__accent" d="M2 13 C 12 9, 22 17, 38 12" />
+          <path d="M2 20 C 12 16, 22 24, 38 19" />
+        </svg>
+        <span class="wordmark__text">
+          <span class="wordmark__name">The Current</span>
+          <span class="wordmark__by">by {SITE.author}</span>
+        </span>
+      </a>
+      <nav aria-label="Main">
+        <ul>
+          {
+            nav.map((n) => (
+              <li>
+                <a href={n.href} aria-current={isCurrent(n.href) ? 'page' : undefined}>
+                  {n.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer__art">
+        <LightStream height={120} calm />
+      </div>
+      <div class="site-footer__inner">
+        <div class="container site-footer__row">
+          <p class="site-footer__sign">
+            <span class="annot">keep flowing</span>
+          </p>
+          <p class="site-footer__links">
+            <span>© {new Date().getFullYear()} {SITE.author}</span>
+            <a href="/journal/">Journal</a>
+            <a href={SITE.linkedin} rel="me noopener">LinkedIn</a>
+            <button type="button" class="motion-toggle" data-motion-toggle aria-pressed="false">Pause motion</button>
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <SpreadExport />
+    <script>
+      const KEY = 'the-current:motion';
+      const root = document.documentElement;
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      for (const btn of document.querySelectorAll<HTMLButtonElement>('[data-motion-toggle]')) {
+        if (reduced) {
+          btn.hidden = true;
+          continue;
+        }
+        const sync = () => {
+          const paused = root.classList.contains('motion-paused');
+          btn.setAttribute('aria-pressed', String(paused));
+          btn.textContent = paused ? 'Play motion' : 'Pause motion';
+        };
+        sync();
+        btn.addEventListener('click', () => {
+          root.classList.toggle('motion-paused');
+          try {
+            localStorage.setItem(KEY, root.classList.contains('motion-paused') ? 'off' : 'on');
+          } catch {}
+          sync();
+        });
+      }
+    </script>
+  </body>
+</html>
+
+<style>
+  .preview-bar {
+    position: relative;
+    z-index: 2;
+    background: var(--draft-bg);
+    color: var(--draft);
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 8px var(--gutter);
+    text-align: center;
+  }
+
+  .site-header,
+  main {
+    position: relative;
+    z-index: 1;
+  }
+
+  .site-header {
+    z-index: 3;
+  }
+
+  /* home: the header floats over the hero's sky */
+  :global(body.has-hero) .site-header {
+    position: absolute;
+    left: 0;
+    right: 0;
+  }
+
+  .site-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-top: 22px;
+    padding-bottom: 22px;
+  }
+
+  .wordmark {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    min-height: 44px;
+  }
+
+  .wordmark__mark {
+    width: 40px;
+    height: 24px;
+    flex: none;
+  }
+
+  .wordmark__mark path {
+    fill: none;
+    stroke: var(--sea);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+  }
+
+  .wordmark__mark .wordmark__accent {
+    stroke: var(--accent);
+    stroke-width: 2.4;
+  }
+
+  .wordmark__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+
+  .wordmark__name {
+    font-family: var(--font-serif);
+    font-size: 25px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--deep);
+  }
+
+  .wordmark__by {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: 3px;
+  }
+
+  nav ul {
+    display: flex;
+    gap: 4px 26px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  nav a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 16px;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  /* a small wave under the current page */
+  nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 6px;
+    height: 6px;
+    height: 2px;
+    bottom: 9px;
+    background: var(--accent);
+    border-radius: 2px;
+    transform: scaleX(0.3);
+    transform-origin: left;
+    transition: opacity var(--ease), transform var(--ease);
+    opacity: 0;
+    transition: opacity var(--ease);
+  }
+
+  nav a:hover::after,
+  nav a[aria-current='page']::after {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  nav a[aria-current='page'] {
+    color: var(--deep);
+  }
+
+  main {
+    min-height: 60vh;
+  }
+
+  main:focus {
+    outline: none;
+  }
+
+  .site-footer {
+    position: relative;
+    z-index: 1;
+    margin-top: var(--section);
+  }
+
+  .site-footer__art {
+    height: 120px;
+  }
+
+  .site-footer__inner {
+    padding: 16px 0 36px;
+  }
+
+  .site-footer__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 24px;
+  }
+
+  .site-footer__sign {
+    margin: 0;
+  }
+
+  .site-footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 20px;
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  .site-footer__links a {
+    color: var(--ink-soft);
+  }
+
+  .motion-toggle {
+    font: inherit;
+    font-size: 14px;
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--ink-soft);
+    text-decoration: underline;
+    text-decoration-color: var(--sea);
+    text-underline-offset: 0.25em;
+    cursor: pointer;
+  }
+
+  .motion-toggle:hover {
+    color: var(--deep);
+  }
+</style>

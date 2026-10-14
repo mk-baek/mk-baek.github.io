@@ -1,0 +1,14 @@
+---
+import type { Entry } from '../lib/content';
+
+type Source = Entry['data']['sources'][number];
+interface Props {
+  source: Source;
+}
+const { source: s } = Astro.props;
+const extra = [s.authorOrPublisher, s.publishedYear, s.locator].filter(Boolean).join(', ');
+---
+
+<span>
+  {s.url ? <a href={s.url} rel="noopener">{s.title}</a> : <cite>{s.title}</cite>}{extra && <span>. {extra}</span>}
+</span>

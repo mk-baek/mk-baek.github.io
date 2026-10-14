@@ -1,0 +1,25 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# local-only writing space: drafts never go to the public repository
+drafts/
+
+# generated preview samples (npm run fixtures)
+fixtures/
+
+# logs and OS files
+npm-debug.log*
+.DS_Store
+Thumbs.db
+.env
+.env.*
+
+# images for local drafts (moved to public/images/ when a post is published)
+public/_drafts/
+
+# local editor/preview settings
+.claude/

@@ -1,0 +1,67 @@
+---
+/**
+ * Soft light behind every page: blurred fields of emerald mist and a faint accent glow,
+ * fixed to the window so the page reads like it sits in sea air. Decorative only.
+ */
+---
+
+<div class="atmosphere" aria-hidden="true">
+  <span class="atmosphere__a"></span>
+  <span class="atmosphere__b"></span>
+  <span class="atmosphere__c"></span>
+</div>
+
+<style>
+  .atmosphere {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .atmosphere span {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+  }
+
+  .atmosphere__a {
+    width: 70vmax;
+    height: 50vmax;
+    left: -20vmax;
+    top: -18vmax;
+    background: color-mix(in srgb, var(--sea) 45%, transparent);
+    animation: drift-a 40s ease-in-out infinite alternate;
+  }
+
+  .atmosphere__b {
+    width: 55vmax;
+    height: 45vmax;
+    right: -22vmax;
+    bottom: -20vmax;
+    background: color-mix(in srgb, var(--sea-mid) 80%, transparent);
+    animation: drift-b 48s ease-in-out infinite alternate;
+  }
+
+  .atmosphere__c {
+    width: 32vmax;
+    height: 26vmax;
+    right: 6vmax;
+    top: 30vh;
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    animation: drift-a 56s ease-in-out infinite alternate-reverse;
+  }
+
+  @keyframes drift-a {
+    to {
+      transform: translate(6vmax, 4vmax);
+    }
+  }
+
+  @keyframes drift-b {
+    to {
+      transform: translate(-5vmax, -3vmax);
+    }
+  }
+</style>

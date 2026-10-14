@@ -1,0 +1,71 @@
+---
+import type { Continuation } from '../lib/content';
+import { entryState, showsDate, libraryKindLabel, libraryCard, libraryState, typeLabel } from '../lib/content';
+import { formatDate, isoDay } from '../lib/dates';
+import StateBadge from './StateBadge.astro';
+
+interface Props {
+  continuation: Continuation;
+}
+const { continuation } = Astro.props;
+const heading = continuation.mode === 'recent' ? 'Recent entries' : 'Continue this question';
+const note = continuation.mode === 'recent' ? 'fresh from the journal' : 'where this thought goes next';
+---
+
+{
+  continuation.mode !== 'none' && (
+    <section class="continue" aria-labelledby="continue-title">
+      <span class="annot">{note}</span>
+      <h2 class="continue__title" id="continue-title">
+        {heading}
+      </h2>
+      <ul class="entry-list">
+        {continuation.items.map((r) =>
+          r.kind === 'entry' ? (
+            <li lang={r.item.data.lang === 'ko' ? 'ko' : undefined}>
+              <p class="meta">
+                <span class="type">{typeLabel[r.item.data.type]}</span>
+                {r.item.data.publishedAt && showsDate(r.item) && (
+                  <time datetime={isoDay(r.item.data.publishedAt)}>{formatDate(r.item.data.publishedAt)}</time>
+                )}
+              </p>
+              <h3>
+                <a href={`/journal/${r.item.id}/`}>{r.item.data.title}</a> <StateBadge state={entryState(r.item)} />
+              </h3>
+              {r.label && <p class="relation">{r.label}</p>}
+            </li>
+          ) : (
+            <li>
+              <p class="meta">
+                <span class="type">Library · {libraryKindLabel[r.item.data.kind]}</span>
+                <span>{libraryCard(r.item).site}</span>
+              </p>
+              <h3>
+                <a href={r.item.data.url} rel="noopener" target="_blank">
+                  {libraryCard(r.item).title} ↗
+                </a>{' '}
+                <StateBadge state={libraryState(r.item)} />
+              </h3>
+              {r.label && <p class="relation">{r.label}</p>}
+            </li>
+          ),
+        )}
+      </ul>
+    </section>
+  )
+}
+
+<style>
+  .continue {
+    margin-top: 72px;
+    max-width: var(--measure);
+  }
+  .continue__title {
+    font-size: var(--title-section);
+    font-weight: 300;
+    margin: 4px 0 4px;
+  }
+  .relation {
+    font-style: italic;
+  }
+</style>

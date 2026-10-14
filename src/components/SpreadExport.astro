@@ -1,0 +1,162 @@
+---
+/**
+ * "Save as image" for every spread on the page: draws the generated art and the words
+ * onto a 1600×1000 canvas and downloads a PNG. Runs only when the button is pressed.
+ */
+---
+
+<script>
+  const W = 1600;
+  const H = 1000;
+
+  const inlineStyles = (src: SVGSVGElement): string => {
+    const clone = src.cloneNode(true) as SVGSVGElement;
+    const from = src.querySelectorAll<SVGElement>('*');
+    const to = clone.querySelectorAll<SVGElement>('*');
+    from.forEach((el, i) => {
+      const cs = getComputedStyle(el);
+      const t = to[i];
+      for (const p of ['fill', 'stroke', 'stroke-width', 'opacity', 'fill-opacity', 'stroke-opacity', 'stroke-dasharray']) {
+        const v = cs.getPropertyValue(p);
+        if (v) t.style.setProperty(p, v);
+      }
+      t.style.setProperty('animation', 'none');
+      t.style.setProperty('transform', cs.transform === 'none' ? '' : cs.transform);
+    });
+    clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    clone.setAttribute('width', String(W));
+    clone.setAttribute('height', String(H));
+    return new XMLSerializer().serializeToString(clone);
+  };
+
+  const loadImage = (svg: string) =>
+    new Promise<HTMLImageElement>((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+    });
+
+  /** Word wrap that also breaks words longer than a line (long Korean phrases, URLs). */
+  const wrap = (ctx: CanvasRenderingContext2D, text: string, max: number) => {
+    const out: string[] = [];
+    for (const para of text.split('\n')) {
+      let line = '';
+      for (const word of para.split(/\s+/).filter(Boolean)) {
+        const test = line ? `${line} ${word}` : word;
+        if (ctx.measureText(test).width <= max) {
+          line = test;
+          continue;
+        }
+        if (line) out.push(line);
+        line = '';
+        if (ctx.measureText(word).width <= max) {
+          line = word;
+        } else {
+          for (const ch of word) {
+            if (ctx.measureText(line + ch).width > max) {
+              out.push(line);
+              line = ch;
+            } else line += ch;
+          }
+        }
+      }
+      if (line) out.push(line);
+    }
+    return out;
+  };
+
+  async function exportSpread(fig: HTMLElement) {
+    await document.fonts.ready;
+    const canvas = document.createElement('canvas');
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext('2d')!;
+    const svg = fig.querySelector<SVGSVGElement>('.spread__art svg');
+    if (svg) ctx.drawImage(await loadImage(inlineStyles(svg)), 0, 0, W, H);
+
+    // soft wash behind the words, like the page version
+    const bg = getComputedStyle(fig).backgroundColor;
+    const placeGuess = fig.classList.contains('spread--center') ? 'center' : fig.classList.contains('spread--right') ? 'right' : 'left';
+    const wash =
+      placeGuess === 'center'
+        ? ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * 0.5)
+        : ctx.createLinearGradient(placeGuess === 'left' ? 0 : W, 0, placeGuess === 'left' ? W : 0, 0);
+    wash.addColorStop(0, bg.replace(/^rgb\((.*)\)$/, 'rgba($1, 0.82)'));
+    wash.addColorStop(0.46, bg.replace(/^rgb\((.*)\)$/, 'rgba($1, 0.82)'));
+    wash.addColorStop(0.8, bg.replace(/^rgb\((.*)\)$/, 'rgba($1, 0)'));
+    ctx.fillStyle = wash;
+    ctx.fillRect(0, 0, W, H);
+
+    const quoteEl = fig.querySelector<HTMLElement>('.spread__quote');
+    const byEl = fig.querySelector<HTMLElement>('.spread__by');
+    const place = fig.classList.contains('spread--center') ? 'center' : fig.classList.contains('spread--right') ? 'right' : 'left';
+    const pad = 120;
+    const maxW = place === 'center' ? 1100 : 900;
+    const x = place === 'left' ? pad : place === 'right' ? W - pad : W / 2;
+    ctx.textAlign = place === 'left' ? 'left' : place === 'right' ? 'right' : 'center';
+    ctx.textBaseline = 'alphabetic';
+
+    if (quoteEl) {
+      const cs = getComputedStyle(quoteEl);
+      const text = quoteEl.innerText.trim();
+      let size = 76;
+      let lines: string[] = [];
+      do {
+        ctx.font = `${cs.fontStyle} ${cs.fontWeight} ${size}px ${cs.fontFamily}`;
+        lines = wrap(ctx, text, maxW);
+        size -= 4;
+      } while (lines.length * size * 1.25 > 560 && size > 36);
+      size += 4;
+      const lh = size * 1.22;
+      const blockH = lines.length * lh + (byEl ? 70 : 0);
+      let y = place === 'right' ? H - pad - blockH + size : (H - blockH) / 2 + size;
+      ctx.fillStyle = cs.color;
+      for (const l of lines) {
+        ctx.fillText(l, x, y);
+        y += lh;
+      }
+      if (byEl) {
+        const bs = getComputedStyle(byEl);
+        ctx.font = `${bs.fontStyle} ${bs.fontWeight} 30px ${bs.fontFamily}`;
+        ctx.fillStyle = bs.color;
+        ctx.fillText(byEl.innerText.trim(), x, y + 30);
+      }
+    }
+
+    const brand = getComputedStyle(fig).getPropertyValue('--spread-ink').trim() || '#1b4556';
+    ctx.textAlign = 'left';
+    ctx.font = `400 24px ${getComputedStyle(document.body).fontFamily}`;
+    ctx.fillStyle = brand;
+    ctx.globalAlpha = 0.75;
+    ctx.fillText(`The Current · ${location.host}`, pad, H - 60);
+    ctx.globalAlpha = 1;
+
+    const a = document.createElement('a');
+    const slug = location.pathname.split('/').filter(Boolean).pop() || 'the-current';
+    const index = Array.from(document.querySelectorAll('[data-spread]')).indexOf(fig);
+    a.download = `${slug}${index > 0 ? `-${index + 1}` : ''}.png`;
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  }
+
+  document.addEventListener('click', async (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-spread-save]');
+    if (!btn) return;
+    const fig = btn.closest<HTMLElement>('[data-spread]');
+    if (!fig) return;
+    const label = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+    try {
+      await exportSpread(fig);
+      btn.textContent = 'Saved';
+    } catch {
+      btn.textContent = 'Could not save';
+    }
+    setTimeout(() => {
+      btn.textContent = label;
+      btn.disabled = false;
+    }, 2000);
+  });
+</script>

@@ -1,0 +1,29 @@
+{
+  "name": "the-current",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "dev:fixtures": "cross-env THE_CURRENT_FIXTURES=1 astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "new": "node scripts/new.mjs",
+    "publish-entry": "node scripts/publish.mjs",
+    "fixtures": "node scripts/make-fixtures.mjs",
+    "library:previews": "node scripts/library-previews.mjs"
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "^7.3.2",
+    "astro": "^7.3.8",
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@types/node": "^24.19.2",
+    "@types/three": "^0.186.0",
+    "cross-env": "^10.1.0",
+    "typescript": "^6.0.3"
+  }
+}
