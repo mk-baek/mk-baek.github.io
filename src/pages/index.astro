@@ -30,7 +30,7 @@ const leadArt = lead ? flowSvg(lead.id) : '';
         {SITE.hero.headline.map((line) => <span class="hero__line">{line}</span>)}
       </h1>
       <p class="hero__intro">{SITE.hero.lead}</p>
-      <a class="hero__cta" href={SITE.hero.ctaHref}>{SITE.hero.cta} <span aria-hidden="true">→</span></a>
+      <a class="hero__cta" href={SITE.hero.ctaHref} data-glide>{SITE.hero.cta} <span aria-hidden="true">→</span></a>
     </div>
     <div class="hero__stream container">
       <KeywordStream keywords={keywords} />
@@ -45,6 +45,7 @@ const leadArt = lead ? flowSvg(lead.id) : '';
     <div class="why__body">
       <p class="why__first">{SITE.homeAbout.lead}</p>
       <p>{SITE.homeAbout.text}</p>
+      {flow.length > 0 && <a class="text-link" href="#the-current-flow" data-glide>Explore the latest →</a>}
     </div>
   </section>
 
@@ -60,7 +61,7 @@ const leadArt = lead ? flowSvg(lead.id) : '';
         </p>
       </section>
     ) : (
-      <section class="section container" aria-labelledby="flow-title">
+      <section class="section container flow-section" id="the-current-flow" aria-labelledby="flow-title">
         <div class="section-head">
           <h2 class="section-title display-face" id="flow-title">
             The Current Flow
@@ -139,11 +140,12 @@ const leadArt = lead ? flowSvg(lead.id) : '';
     else img.addEventListener('error', () => img.remove());
   }
 
-  // "Explore The Current" glides down to the introduction on this page (no page change, no #hash in the address).
-  const cta = document.querySelector<HTMLAnchorElement>('.hero__cta[href^="#"]');
-  const target = cta && document.querySelector<HTMLElement>(cta.getAttribute('href')!);
-  if (cta && target) {
-    cta.addEventListener('click', (event) => {
+  // "Explore The Current" and "Explore the latest" glide down to their section on this page
+  // (no page change, no #hash in the address). With motion off they jump there instead.
+  for (const link of document.querySelectorAll<HTMLAnchorElement>('a[data-glide][href^="#"]')) {
+    const target = document.querySelector<HTMLElement>(link.getAttribute('href')!);
+    if (!target) continue;
+    link.addEventListener('click', (event) => {
       event.preventDefault();
       const still = matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('motion-paused');
       target.scrollIntoView({ behavior: still ? 'instant' : 'smooth', block: 'start' });
@@ -344,12 +346,18 @@ const leadArt = lead ? flowSvg(lead.id) : '';
     max-width: 38em;
   }
 
-  .why__body p:last-child {
+  .why__body p:last-of-type {
     margin-bottom: 0;
   }
 
+  .why__body .text-link {
+    display: inline-block;
+    margin-top: 18px;
+  }
+
   /* "Explore The Current" scrolls here; leave a little air above the section */
-  .why {
+  .why,
+  .flow-section {
     scroll-margin-top: 24px;
   }
 
