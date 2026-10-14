@@ -45,7 +45,7 @@ const leadArt = lead ? flowSvg(lead.id) : '';
     <div class="why__body">
       <p class="why__first">{SITE.homeAbout.lead}</p>
       <p>{SITE.homeAbout.text}</p>
-      {flow.length > 0 && <a class="text-link" href="#the-current-flow" data-glide>Explore the latest →</a>}
+      {flow.length > 0 && <a class="text-link" href="#the-current-flow" data-glide="center">Explore the latest →</a>}
     </div>
   </section>
 
@@ -68,7 +68,7 @@ const leadArt = lead ? flowSvg(lead.id) : '';
           </h2>
           <span class="annot">what I’m reading and thinking about now</span>
         </div>
-        <div class="flow">
+        <div class="flow" data-glide-end>
           {lead && (
             <article class="flow__lead" lang={lead.lang === 'ko' ? 'ko' : undefined}>
               <a
@@ -148,7 +148,20 @@ const leadArt = lead ? flowSvg(lead.id) : '';
     link.addEventListener('click', (event) => {
       event.preventDefault();
       const still = matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('motion-paused');
-      target.scrollIntoView({ behavior: still ? 'instant' : 'smooth', block: 'start' });
+      const behavior = still ? 'instant' : 'smooth';
+      if (link.dataset.glide !== 'center') {
+        target.scrollIntoView({ behavior, block: 'start' });
+        return;
+      }
+      // data-glide="center": frame the section's content (its heading down to the last item)
+      // in the middle of the screen when it fits; otherwise bring the heading to the top.
+      const first = target.querySelector<HTMLElement>('h2') ?? target;
+      const last = target.querySelector<HTMLElement>('[data-glide-end]') ?? target;
+      const top = first.getBoundingClientRect().top + scrollY;
+      const height = last.getBoundingClientRect().bottom + scrollY - top;
+      const gap = 24;
+      const y = height + gap * 2 <= innerHeight ? top - (innerHeight - height) / 2 : top - gap;
+      scrollTo({ top: Math.max(0, y), behavior });
     });
   }
 </script>

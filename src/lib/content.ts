@@ -291,8 +291,12 @@ export interface FlowItem {
   lang: 'en' | 'ko';
 }
 
-/** Notes are shown without a date; Projects and Insights keep theirs. */
-export const showsDate = (e: Entry) => e.data.type !== 'note';
+/**
+ * Dates stay in the content files (they still decide the order of lists)
+ * but are not shown on the site. Set to true to show them again.
+ */
+export const SHOW_DATES = false;
+export const showsDate = (_e: Entry) => SHOW_DATES;
 
 /**
  * The Current Flow on the home page: 2 Journal entries, then 2 Library items.
@@ -341,7 +345,7 @@ export function latestFlow(site: SiteData, perGroup = 2): FlowItem[] {
         external: true,
         date: l.data.addedAt,
         dateLabel: 'Added',
-        showDate: true,
+        showDate: SHOW_DATES,
         state: libraryState(l),
         image: card.image,
         lang: l.data.lang,

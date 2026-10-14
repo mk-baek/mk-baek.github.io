@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import StateBadge from '../components/StateBadge.astro';
-import { getSite, libraryByYear, libraryCard, libraryKindLabel, libraryState, type LibraryItem } from '../lib/content';
+import { getSite, SHOW_DATES, libraryByYear, libraryCard, libraryKindLabel, libraryState, type LibraryItem } from '../lib/content';
 import { sceneSvg } from '../lib/art.mjs';
 import { formatDate, isoDay } from '../lib/dates';
 
@@ -77,7 +77,7 @@ const cards = items.map((item) => ({ item, card: libraryCard(item), fallback: sc
                     {card.description && <p class="card__desc">{card.description}</p>}
                     <p class="card__foot meta">
                       <span>{card.host}</span>
-                      {item.data.addedAt && (
+                      {SHOW_DATES && item.data.addedAt && (
                         <span>
                           Added <time datetime={isoDay(item.data.addedAt)}>{formatDate(item.data.addedAt)}</time>
                         </span>
