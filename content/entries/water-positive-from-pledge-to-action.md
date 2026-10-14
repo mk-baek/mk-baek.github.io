@@ -33,7 +33,7 @@ Amazon과 Microsoft의 공동 프로젝트 소식은 그때 고민했던 ‘어�
 
 **2. 기업의 자금이 지역의 실행 역량과 만납니다.** 인공 배수시설을 걷어 내 물이 천천히 흐르며 땅에 스며들게 하는 복원 방식에 더해 지역의 토지 소유자, 농민, 지방정부가 함께 참여하는 구조가 눈에 들어왔습니다. 시설 밖의 물 문제에 대응하려면 그 땅을 실제로 관리하고 변화를 만들어 갈 지역의 주체가 필요하다는 점을 보여 줍니다. [공식 발표](https://www.aboutamazon.eu/news/sustainability/amazon-microsoft-water-replenishment-project-nabu-germany)
 
-**3. 실행 이후에 무엇을 볼지도 계획에 담았습니다.** 공식 발표에는 2028년부터 2038년까지 생물다양성의 변화를 해마다 관찰하는 계획이 들어 있습니다. 물 보충량에 대한 기대에 그치지 않고 생태계의 변화를 오래 지켜보겠다는 점이 중요하게 느껴졌습니다. [모니터링 계획](https://www.aboutamazon.eu/news/sustainability/amazon-microsoft-water-replenishment-project-nabu-germany)
+**3. 실행 이후에 무엇을 볼지도 계획에 담았습니다.** 공식 발표에는 2028년부터 2038년까지 생물다양성의 변화를 해마다 관찰하는 계획이 들어 있습니다. 물 보충량에 대한 기대에 그치지 않고 생태계의 변화를 오래 지켜보겠다는 점이 중요하게 느껴졌습니다.
 
 [![Amazon과 Microsoft의 독일 공동 물 보충 프로젝트 공식 발표 페이지](/images/water-positive-from-pledge-to-action/amazon-nabu-announcement.webp)](https://www.aboutamazon.eu/news/sustainability/amazon-microsoft-water-replenishment-project-nabu-germany)
 
