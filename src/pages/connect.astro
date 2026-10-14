@@ -72,7 +72,9 @@ const paragraphs = [rest.join(' '), ...bio.paragraphs.slice(1)].filter(Boolean);
     line-height: 1.45;
     color: var(--deep);
     margin-bottom: 1.2em;
-    font-weight: 400;
+    /* same face as the page titles (e.g. "Library"), at reading size */
+    font-weight: 420;
+    letter-spacing: -0.02em;
   }
 
   .contact__side {

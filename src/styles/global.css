@@ -586,13 +586,12 @@ p {
   padding: 56px 0 32px;
 }
 
-/* page titles share the display face of the home headlines ("A changing world.", "The Current") */
+/* page titles (About, Journal, Library): Fraunces at its natural optical size, slightly heavier */
 .page-head h1 {
   font-size: var(--title-page);
-  font-variation-settings: 'opsz' 144;
-  font-weight: 400;
+  font-weight: 420;
   line-height: 1.05;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   margin: 10px 0 18px;
 }
 
