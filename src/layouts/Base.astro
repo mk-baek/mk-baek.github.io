@@ -1,4 +1,10 @@
 ---
+// Fraunces is served from this site (not Google Fonts) and preloaded, so headings
+// appear in their own face from the first paint instead of flashing a stand-in font.
+import '@fontsource-variable/fraunces/opsz.css';
+import '@fontsource-variable/fraunces/opsz-italic.css';
+import frauncesNormal from '@fontsource-variable/fraunces/files/fraunces-latin-opsz-normal.woff2?url';
+import frauncesItalic from '@fontsource-variable/fraunces/files/fraunces-latin-opsz-italic.woff2?url';
 import '../styles/global.css';
 import Atmosphere from '../components/Atmosphere.astro';
 import SpreadExport from '../components/SpreadExport.astro';
@@ -59,12 +65,8 @@ const isCurrent = (href: string) => path === href || path.startsWith(href) || pa
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
     />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..500&display=swap"
-    />
+    <link rel="preload" href={frauncesNormal} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={frauncesItalic} as="font" type="font/woff2" crossorigin />
     <script is:inline>
       try {
         if (localStorage.getItem('the-current:motion') === 'off') document.documentElement.classList.add('motion-paused');
