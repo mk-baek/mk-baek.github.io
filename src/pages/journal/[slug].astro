@@ -84,7 +84,7 @@ const titleInSpread = Boolean(spread && !spread.quote);
         onSource && (
           <div class="read__source" lang="en">
             <span class="eyebrow">On</span>
-            <SourceLine source={onSource} />
+            <SourceLine source={onSource} stacked />
             {d.headQuote && <p class="read__source-quote">{d.headQuote.text}</p>}
           </div>
         )

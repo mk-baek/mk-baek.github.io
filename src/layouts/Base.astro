@@ -158,6 +158,14 @@ const isCurrent = (href: string) => path === href || path.startsWith(href) || pa
         });
       }
     </script>
+    <script>
+      // Links to other websites open in a new tab, so readers keep their place here.
+      for (const a of document.querySelectorAll<HTMLAnchorElement>('a[href^="http"]')) {
+        if (a.host === location.host) continue;
+        a.target = '_blank';
+        a.rel = Array.from(new Set([...a.rel.split(' ').filter(Boolean), 'noopener'])).join(' ');
+      }
+    </script>
   </body>
 </html>
 

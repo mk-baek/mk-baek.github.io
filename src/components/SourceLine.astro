@@ -4,11 +4,19 @@ import type { Entry } from '../lib/content';
 type Source = Entry['data']['sources'][number];
 interface Props {
   source: Source;
+  /** put author, outlet and date on their own line (used in the "On" box) */
+  stacked?: boolean;
 }
-const { source: s } = Astro.props;
+const { source: s, stacked = false } = Astro.props;
 const extra = [s.authorOrPublisher, s.publishedYear, s.locator].filter(Boolean).join(', ');
 ---
 
 <span>
-  {s.url ? <a href={s.url} rel="noopener">{s.title}</a> : <cite>{s.title}</cite>}{extra && <span>. {extra}</span>}
+  {s.url ? <a href={s.url} rel="noopener">{s.title}</a> : <cite>{s.title}</cite>}{extra && (stacked ? <span class="source-extra">{extra}</span> : <span>. {extra}</span>)}
 </span>
+
+<style>
+  .source-extra {
+    display: block;
+  }
+</style>
