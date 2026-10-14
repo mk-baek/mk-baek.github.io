@@ -22,7 +22,7 @@ export const SITE = {
   homeAbout: {
     title: 'The Current',
     lead: 'A personal journal of knowledge and growth in motion.',
-    text: 'The Current explores how a changing world shapes business decisions and how those choices can support a more sustainable future.',
+    text: 'The Current explores how a changing world shapes business decisions and how those choices can support a more sustainable future. It is an evolving record of learning and reflection, with room to reconsider and change course.',
   },
 
   /** About page: "Why The Current" */
