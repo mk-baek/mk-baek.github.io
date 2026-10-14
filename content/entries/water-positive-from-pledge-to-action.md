@@ -23,7 +23,9 @@ sources:
 lang: ko
 ---
 
-2026년 상반기에 Regenerative Water Stewardship 프로젝트를 진행하며 저는 제조기업의 물 관리가 시설 안의 효율 개선을 넘어 유역과 생태계의 회복으로 넓어져야 한다고 제안했습니다. 당시 보고서에서는 Microsoft와 Google의 Water Positive 전략을 벤치마크 사례로 살펴보았습니다.
+## Why this article
+
+2026년 상반기에 Regenerative Water Stewardship 프로젝트를 진행하며 제조기업의 물 관리가 시설 안의 효율 개선을 넘어 유역과 생태계의 회복으로 넓어져야 한다고 제안한 적이 있습니다. 당시 보고서에서는 Microsoft와 Google의 Water Positive 전략을 벤치마크 사례로 살펴보았습니다.
 
 Amazon과 Microsoft의 공동 프로젝트 소식은 그때 고민했던 ‘어떻게 실행할 것인가’라는 질문을 다시 떠올리게 했습니다. 보고서에서 그렸던 방향이 실제로는 어떤 참여자와 실행 방식으로 구현되는지 살펴보고 싶었습니다.
 
