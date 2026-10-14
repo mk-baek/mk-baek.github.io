@@ -341,8 +341,9 @@ export function latestFlow(site: SiteData, perGroup = 2): FlowItem[] {
         label: `Library · ${libraryKindLabel[l.data.kind]}`,
         title: card.title,
         summary: l.data.why,
-        href: l.data.url,
-        external: true,
+        // on the home page every link stays on this site: a Library pick opens its card on the Library page
+        href: `/library/#${l.id}`,
+        external: false,
         date: l.data.addedAt,
         dateLabel: 'Added',
         showDate: SHOW_DATES,

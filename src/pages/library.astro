@@ -42,7 +42,7 @@ const cards = items.map((item) => ({ item, card: libraryCard(item), fallback: sc
 
           <ul class="shelf" data-shelf>
             {cards.map(({ item, card, fallback }) => (
-              <li data-kind={item.data.kind} lang={item.data.lang === 'ko' ? 'ko' : undefined}>
+              <li id={item.id} data-kind={item.data.kind} lang={item.data.lang === 'ko' ? 'ko' : undefined}>
                 <article class="card">
                   <a class="card__media" href={item.data.url} rel="noopener" target="_blank" tabindex="-1" aria-hidden="true">
                     <span class="card__fallback" set:html={fallback} />
@@ -140,6 +140,26 @@ const cards = items.map((item) => ({ item, card: libraryCard(item), fallback: sc
     border-radius: 14px;
     overflow: hidden;
     transition: border-color var(--ease), transform var(--ease);
+  }
+
+  /* arriving from the home page (/library/#id): leave air above the card and mark it for a moment */
+  .shelf > li {
+    scroll-margin-top: 120px;
+  }
+
+  .shelf > li:target .card {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+    animation: card-arrive 2.4s ease-out 1;
+  }
+
+  @keyframes card-arrive {
+    0% {
+      box-shadow: 0 0 0 10px color-mix(in srgb, var(--accent) 30%, transparent);
+    }
+    100% {
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+    }
   }
 
   .card:hover,
