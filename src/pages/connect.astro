@@ -125,8 +125,11 @@ const paragraphs = [rest.join(' '), ...bio.paragraphs.slice(1)].filter(Boolean);
     color: var(--ink-soft);
   }
 
+  /* centred in the Get in touch box */
   .reach__btn {
-    display: inline-flex;
+    display: flex;
+    width: fit-content;
+    margin-inline: auto;
     align-items: center;
     gap: 10px;
     min-height: 48px;

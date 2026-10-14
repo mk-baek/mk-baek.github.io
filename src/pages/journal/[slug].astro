@@ -21,6 +21,8 @@ const d = entry.data;
 const { Content, headings } = await render(entry);
 const h2s = headings.filter((h) => h.depth === 2);
 const showUpdated = d.updatedAt && d.publishedAt && isoDay(d.updatedAt) !== isoDay(d.publishedAt);
+// the "On" box: what this entry responds to (set with `on:`; Notes fall back to their first source)
+const onSource = d.on ?? (d.type === 'note' ? d.sources[0] : undefined);
 const next = continuation(site, { id: entry.id, questions: d.questions });
 const isKo = d.lang === 'ko';
 const spread = entrySpread(entry);
@@ -70,7 +72,7 @@ const titleInSpread = Boolean(spread && !spread.quote);
       <StateBadge state={entryState(entry)} />
       <p class="read__byline" lang="en">by {SITE.author}</p>
       {
-        d.headQuote && (
+        d.headQuote && !onSource && (
           <figure class="read__headquote" lang="en">
             <blockquote>“{d.headQuote.text}”</blockquote>
             {d.headQuote.by && <figcaption>— {d.headQuote.by}</figcaption>}
@@ -79,11 +81,12 @@ const titleInSpread = Boolean(spread && !spread.quote);
       }
       <span class="current-rule read__rule" aria-hidden="true"></span>
       {
-        d.type === 'note' && d.sources[0] && (
-          <p class="read__source" lang="en">
+        onSource && (
+          <div class="read__source" lang="en">
             <span class="eyebrow">On</span>
-            <SourceLine source={d.sources[0]} />
-          </p>
+            <SourceLine source={onSource} />
+            {d.headQuote && <p class="read__source-quote">{d.headQuote.text}</p>}
+          </div>
         )
       }
       {
@@ -227,6 +230,15 @@ const titleInSpread = Boolean(spread && !spread.quote);
     .read__tagline {
       font-size: calc(19px * 1.12);
     }
+  }
+
+  .read__source-quote {
+    margin: 12px 0 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--deep);
   }
 
   .read__source .eyebrow {

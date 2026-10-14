@@ -101,6 +101,8 @@ const entries = defineCollection({
       /** shown under the quote, e.g. "원문 일부 발췌" (excerpt), with a link to where the quote comes from */
       quoteNote: z.string().optional(),
       quoteSource: z.object({ title: z.string().min(1), url: z.url() }).optional(),
+      /** what the "On" box under the title points to (Notes fall back to their first source) */
+      on: source.optional(),
       /** one line set in a soft box under the title (e.g. a project's motto) */
       tagline: z.string().optional(),
       /** a second quote shown under the title, in place of the "exploring" line */

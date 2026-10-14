@@ -23,13 +23,14 @@ sources:
   - title: "SBTN — Science-Based Targets for Nature 2.0: a practical route to credible action on nature"
     url: https://sciencebasedtargetsnetwork.org/news/news/science-based-targets-for-nature-2-0-a-practical-route-to-credible-action-on-nature/
     locator: "October 12, 2026"
+on:
+  title: "Science Based Targets Network (SBTN)"
+  url: https://sciencebasedtargetsnetwork.org/
 headQuote:
   text: "Many companies already have nature-related work underway, but imperfect data, limited traceability and complex value chains can make it difficult to translate that work into clear decisions."
 featured: 2
 lang: ko
 ---
-
-*[Science Based Targets Network (SBTN)](https://sciencebasedtargetsnetwork.org/) · 공식 홈페이지*
 
 ## What is SBTN?
 
