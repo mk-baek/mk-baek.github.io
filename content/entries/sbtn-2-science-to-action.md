@@ -22,7 +22,6 @@ sources:
     url: https://sciencebasedtargetsnetwork.org/companies/take-action/sbts-for-nature-2-0/
   - title: "SBTN — Science-Based Targets for Nature 2.0: a practical route to credible action on nature"
     url: https://sciencebasedtargetsnetwork.org/news/news/science-based-targets-for-nature-2-0-a-practical-route-to-credible-action-on-nature/
-    locator: "October 12, 2026"
 on:
   title: "Science-Based Targets for Nature 2.0: a practical route to credible action on nature"
   authorOrPublisher: "Science Based Targets Network (SBTN)"
@@ -77,5 +76,3 @@ SBTN은 기업의 활동을 이해하는 단계부터 실행 결과를 추적하
 **목표를 세웠다는 것과 자연이 실제로 회복되었다는 것은 다릅니다.** 공급업체 참여나 데이터 개선도 중요한 준비 과정이지만 그 자체를 환경 개선의 결과로 볼 수는 없습니다. SBTN도 참여·추적 개선 목표를 Step 3의 과학기반 목표와 구분합니다. [목표 유형 안내](https://sciencebasedtargetsnetwork.org/companies/take-action/sbts-for-nature-2-0/)
 
 그래서 기업의 발표를 읽을 때는 어느 단계까지 진행했는지와 어떤 사업과 지역을 포함했는지, 그리고 실제 변화를 어떻게 확인하는지를 함께 살펴야 합니다. 앞으로 지켜볼 과제는 더 유연해진 절차가 기업의 참여를 늘리는 데 그치지 않고 지역의 자연 상태를 개선하는 행동으로 이어지는지입니다.
-
-*2026년 10월 14일 확인한 공식 자료를 바탕으로 정리했습니다. 단계 설명과 예시는 독자의 이해를 위한 요약입니다.*
