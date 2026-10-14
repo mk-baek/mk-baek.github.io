@@ -13,7 +13,7 @@ export const SITE = {
   hero: {
     /** Each item is its own line. */
     headline: ['A changing world.', 'An evolving perspective.'],
-    lead: 'A journal on sustainability — making sense of change and finding better ways forward for businesses, people, and the planet.',
+    lead: 'A journal on sustainability — finding better ways forward for businesses, people, and the planet.',
     cta: 'Explore The Current',
     ctaHref: '#the-current',
   },
