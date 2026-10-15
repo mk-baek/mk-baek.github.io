@@ -6,9 +6,9 @@ import Tide from '../components/Tide.astro';
 
 const { why } = SITE;
 
-// **word** in the About copy is set in bold; everything else is plain text.
+// **word** in the About copy is set in bold, and \n starts a new line; everything else is plain text.
 const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-const rich = (s: string) => escape(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+const rich = (s: string) => escape(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br />');
 ---
 
 <Base title={why.title} description={SITE.description} arrows=".meanings">

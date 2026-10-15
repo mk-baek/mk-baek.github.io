@@ -30,7 +30,7 @@ export const SITE = {
     title: 'Why The Current',
     paragraphs: [
       'Ideas in motion — on sustainability, strategy, and the choices in between.',
-      'It began with one question: how can businesses make better decisions for people and the planet? I don’t have a final answer. This journal is where I’m working toward one — gathering what I read, reflecting on what I learn, and testing how ideas might shape the choices organizations make.',
+      'It began with one question: how can businesses make better decisions for people and the planet?\nI don’t have a final answer. This journal is where I’m working toward one — gathering what I read, reflecting on what I learn, and testing how ideas might shape the choices organizations make.',
       'You’ll find a few kinds of writing here. **Projects** look back on work done in practice. **Notes** follow a single reading or event to the question it raises. **Insights** unpack a framework or announcement. **Library** collects the books and reports that shape my thinking. Together, they trace a perspective that is still evolving, with room to reconsider and change course.',
     ],
     meaningsIntro: 'One word, three meanings.',
