@@ -108,7 +108,13 @@ const { stops = '.read__body h2, .read__foot', label = 'Move through this entry'
         : null;
       if (end) {
         const height = end.getBoundingClientRect().bottom + scrollY - headTop;
-        if (height + GAP * 2 <= innerHeight) return headTop - (innerHeight - height) / 2;
+        if (height + GAP * 2 <= innerHeight) {
+          const centred = headTop - (innerHeight - height) / 2;
+          // never leave the tail of the section above peeking in at the top of the screen
+          const prev = el.previousElementSibling as HTMLElement | null;
+          const prevBottom = prev ? prev.getBoundingClientRect().bottom + scrollY : -Infinity;
+          return Math.min(Math.max(centred, prevBottom + 1), headTop - GAP);
+        }
       }
       return headTop - GAP;
     };
