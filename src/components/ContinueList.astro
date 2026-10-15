@@ -8,7 +8,7 @@ interface Props {
   continuation: Continuation;
 }
 const { continuation } = Astro.props;
-const heading = continuation.mode === 'recent' ? 'Recent entries' : 'Continue this question';
+const heading = { recent: 'Recent entries', mixed: 'Continue reading', continue: 'Continue this question', none: '' }[continuation.mode];
 const note = continuation.mode === 'recent' ? 'fresh from the journal' : 'where this thought goes next';
 ---
 

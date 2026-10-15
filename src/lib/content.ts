@@ -423,13 +423,15 @@ export function keywordStream(site: SiteData, limit = 10): Keyword[] {
 export type Related = { kind: 'entry'; item: Entry; label?: string } | { kind: 'library'; item: LibraryItem; label?: string };
 
 export interface Continuation {
-  /** 'continue' = author links and same-question entries; 'recent' = unrelated latest entries. */
-  mode: 'continue' | 'recent' | 'none';
+  /** 'continue' = all related; 'mixed' = related first, topped up with recent entries; 'recent' = nothing related. */
+  mode: 'continue' | 'mixed' | 'recent' | 'none';
   items: Related[];
 }
 
 const SAME_QUESTION_LABEL = 'Another entry on the same question';
-const MAX_RELATED = 3;
+const RECENT_LABEL = 'Recent from the journal';
+/** Every entry ends with exactly this many suggestions (fewer only if the journal is smaller). */
+const MAX_RELATED = 2;
 
 export function continuation(site: SiteData, current: { id: string; questions: string[] }): Continuation {
   const items: Related[] = [];
@@ -459,11 +461,11 @@ export function continuation(site: SiteData, current: { id: string; questions: s
   for (const e of site.entries)
     if (e.data.questions.some((q) => qs.includes(q))) add({ kind: 'entry', item: e, label: SAME_QUESTION_LABEL });
 
-  if (items.length) return { mode: 'continue', items };
-
-  // 3. Nothing related: offer the latest entries, presented separately as "Recent entries".
-  for (const e of site.entries) add({ kind: 'entry', item: e });
-  return { mode: items.length ? 'recent' : 'none', items };
+  // 3. Top up with the latest entries so there are always two suggestions.
+  const related = items.length;
+  for (const e of site.entries) add({ kind: 'entry', item: e, label: related ? RECENT_LABEL : undefined });
+  if (!items.length) return { mode: 'none', items };
+  return { mode: related === 0 ? 'recent' : related < items.length ? 'mixed' : 'continue', items };
 }
 
 /* ------------------------------------------------------------------ */
