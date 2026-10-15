@@ -29,7 +29,6 @@ on:
   locator: "October 12, 2026"
 headQuote:
   text: "Many companies already have nature-related work underway, but imperfect data, limited traceability and complex value chains can make it difficult to translate that work into clear decisions."
-featured: 2
 lang: ko
 ---
 
