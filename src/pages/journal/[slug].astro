@@ -6,6 +6,7 @@ import ShareButton from '../../components/ShareButton.astro';
 import SourceLine from '../../components/SourceLine.astro';
 import ContinueList from '../../components/ContinueList.astro';
 import Spread from '../../components/Spread.astro';
+import SectionArrows from '../../components/SectionArrows.astro';
 import { getSite, continuation, entrySpread, entryState, isFromTalks, showsDate, typeLabel, type Entry } from '../../lib/content';
 import { formatDate, isoDay } from '../../lib/dates';
 import { SITE } from '../../site';
@@ -141,6 +142,8 @@ const titleInSpread = Boolean(spread && !spread.quote);
       <a class="text-link back" href="/journal/">← Back to Journal</a>
     </footer>
   </article>
+  {/* long entries (3+ sections) get the floating next-section / back-to-top arrows */}
+  {h2s.length >= 3 && <SectionArrows />}
 </Base>
 
 <style>
