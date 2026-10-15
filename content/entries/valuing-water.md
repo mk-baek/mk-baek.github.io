@@ -13,7 +13,7 @@ lang: ko
 
 ## The Problem
 
-2026년 상반기, USC Marshall MBA 프로젝트로 글로벌 엔지니어링 컨설팅 기업 Ramboll의 덴마크 Water 부서와 함께 글로벌 제조기업의 Water Stewardship 전략 프로젝트를 수행했습니다.
+2026년 상반기, USC Marshall MBA 프로젝트로 글로벌 엔지니어링 컨설팅 기업 Ramboll Denmark의 Water 부서와 함께 제조기업의 Water Stewardship 전략 프로젝트를 수행했습니다.
 
 프로젝트의 핵심 주제는 **Regenerative Water Stewardship**(재생적 물 관리)이었습니다. 물 사용에 따른 부정적 영향을 줄이는 것을 넘어 기업이 의존하는 유역의 건강성과 생태계 회복에 기여하는 접근입니다. Ramboll은 잠재 고객인 글로벌 제조기업들이 효율 중심의 물 관리를 넘어 이러한 관점을 기업 전략과 운영에 반영할 수 있도록 돕고자 했습니다.
 
