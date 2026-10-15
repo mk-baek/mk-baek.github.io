@@ -14,7 +14,7 @@ export const SITE = {
     /** Each item is its own line. */
     headline: ['A changing world.', 'An evolving perspective.'],
     lead: 'A journal on sustainability — finding better ways forward for businesses, people, and the planet.',
-    cta: 'Explore The Current',
+    cta: 'Explore the Latest',
     ctaHref: '#the-current-flow',
   },
 
