@@ -84,6 +84,9 @@ const leadArt = lead ? flowSvg(lead.id) : '';
                 <StateBadge state={lead.state} />
               </h3>
               <p class="flow__summary">{lead.summary}</p>
+              <a class="flow__next" href="#the-current" data-glide>
+                Discover The Current <span aria-hidden="true">↓</span>
+              </a>
             </article>
           )}
           {side.length > 0 && (
@@ -303,6 +306,28 @@ const leadArt = lead ? flowSvg(lead.id) : '';
   .flow__summary {
     color: var(--ink-soft);
     max-width: 44em;
+  }
+
+  /* a quieter companion to the hero button: glides down to The Current */
+  .flow__next {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    margin-top: 22px;
+    padding: 8px 22px;
+    border: 1px solid var(--deep);
+    border-radius: 999px;
+    color: var(--deep);
+    font-size: 15px;
+    text-decoration: none;
+    transition: background var(--ease), color var(--ease);
+  }
+
+  .flow__next:hover,
+  .flow__next:focus-visible {
+    background: var(--deep);
+    color: var(--paper);
   }
 
   .flow__side h3 {
