@@ -55,7 +55,7 @@ const rich = (s: string) => escape(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</str
   /* the About page is sized to fit on one screen on a laptop: a smaller title, tighter lines */
   .about__head {
     padding-top: 28px;
-    padding-bottom: 20px;
+    padding-bottom: 50px;
   }
 
   .about__head h1 {
@@ -84,8 +84,8 @@ const rich = (s: string) => escape(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</str
   /* short laptop screens (around 720px tall): a little less air so it still fits */
   @media (min-width: 1000px) and (max-height: 760px) {
     .about__head {
-      padding-top: 10px;
-      padding-bottom: 14px;
+      padding-top: 4px;
+      padding-bottom: 26px;
     }
 
     .about__lead {
