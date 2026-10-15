@@ -5,7 +5,8 @@
  * section headings then sources; home: The Current Flow, The Current; lists: each item).
  *
  * A stop that is a <section> lands with its heading near the top; if the section marks the
- * end of its content with [data-glide-end] and that fits on screen, the content is centred.
+ * end of its content ([data-glide-end] inside it, or data-glide-until="selector" for content
+ * that follows it) and that fits on screen, the content is centred.
  * With "Pause motion" or reduced motion the page jumps instead of gliding.
  */
 interface Props {
@@ -100,7 +101,11 @@ const { stops = '.read__body h2, .read__foot', label = 'Move through this entry'
       const isSection = el.tagName === 'SECTION';
       const head = isSection ? ((el.firstElementChild as HTMLElement | null) ?? el) : el;
       const headTop = head.getBoundingClientRect().top + scrollY;
-      const end = isSection ? el.querySelector<HTMLElement>('[data-glide-end]') : null;
+      // the content to frame ends at [data-glide-end] inside the section, or at the element named by data-glide-until
+      const end = isSection
+        ? (el.querySelector<HTMLElement>('[data-glide-end]') ??
+          (el.dataset.glideUntil ? document.querySelector<HTMLElement>(el.dataset.glideUntil) : null))
+        : null;
       if (end) {
         const height = end.getBoundingClientRect().bottom + scrollY - headTop;
         if (height + GAP * 2 <= innerHeight) return headTop - (innerHeight - height) / 2;
