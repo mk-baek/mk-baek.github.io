@@ -64,7 +64,7 @@ const leadArt = lead ? flowSvg(lead.id) : '';
               >
                 <span class="flow__art-fill" set:html={leadArt} />
                 {lead.image && (
-                  <img src={lead.image} alt="" loading="lazy" referrerpolicy="no-referrer" data-preview-img />
+                  <img src={lead.image} alt="" loading="eager" referrerpolicy="no-referrer" data-preview-img />
                 )}
               </a>
               <p class="meta">
@@ -132,8 +132,9 @@ const leadArt = lead ? flowSvg(lead.id) : '';
 <script>
   // A broken Library preview image falls back to the generated art underneath.
   for (const img of document.querySelectorAll<HTMLImageElement>('[data-preview-img]')) {
-    if (img.complete && img.naturalWidth === 0) img.remove();
-    else img.addEventListener('error', () => img.remove());
+    // (lazy images can look "complete" with no size on iPhone Safari before they load: wait for a real error)
+    img.addEventListener('error', () => img.remove());
+    if (img.complete && img.naturalWidth === 0 && img.loading !== 'lazy') img.remove();
   }
 
   // "Explore The Current" and "Explore the latest" glide down to their section on this page

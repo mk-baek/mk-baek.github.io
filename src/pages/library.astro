@@ -57,7 +57,7 @@ const cards = items.map((item) => ({ item, card: libraryCard(item), fallback: sc
                       <img
                         src={card.image}
                         alt=""
-                        loading="lazy"
+                        loading="eager"
                         decoding="async"
                         referrerpolicy="no-referrer"
                         data-preview-img
@@ -267,10 +267,12 @@ const cards = items.map((item) => ({ item, card: libraryCard(item), fallback: sc
 
 <script>
   // A broken preview image falls back to the generated art underneath.
+  // (A lazy image that has not loaded yet can look "complete" with no size on iPhone Safari,
+  //  so only eager images are judged that way; lazy ones wait for a real error.)
   for (const img of document.querySelectorAll<HTMLImageElement>('[data-preview-img]')) {
     const hide = () => img.remove();
-    if (img.complete && img.naturalWidth === 0) hide();
-    else img.addEventListener('error', hide);
+    img.addEventListener('error', hide);
+    if (img.complete && img.naturalWidth === 0 && img.loading !== 'lazy') hide();
   }
 
   // Filters kept in the address: ?kind= (books / reports / …) and ?topic= (from a home-page keyword)

@@ -44,28 +44,7 @@
   }
 }
 
-/* Dark: the sea at night */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #08191b;
-    --paper-2: #0c2326;
-    --deep: #d4ece6;
-    --ink: #d3e4e0;
-    --ink-soft: #93aca7;
-    --sea: #2f7a70;
-    --sea-mid: #173a39;
-    --sea-soft: #10292b;
-    --accent: #5fd3bb;
-    --accent-soft: #12352f;
-    --hero-sky: #0a1d24;
-    --hero-horizon: #11303a;
-    --hero-sea: #2a8f9a;
-    --hero-deep: #0b3a52;
-    --draft: #f3c77d;
-    --draft-bg: #3a2c12;
-    color-scheme: dark;
-  }
-}
+/* The site is always shown in its light design, whatever the device's appearance setting. */
 
 *,
 *::before,
