@@ -15,7 +15,7 @@ export const SITE = {
     headline: ['A changing world.', 'An evolving perspective.'],
     lead: 'A journal on sustainability — finding better ways forward for businesses, people, and the planet.',
     cta: 'Explore The Current',
-    ctaHref: '#the-current',
+    ctaHref: '#the-current-flow',
   },
 
   /** Home page: "About The Current" */

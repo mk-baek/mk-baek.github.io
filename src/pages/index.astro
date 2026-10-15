@@ -30,32 +30,16 @@ const leadArt = lead ? flowSvg(lead.id) : '';
         {SITE.hero.headline.map((line) => <span class="hero__line">{line}</span>)}
       </h1>
       <p class="hero__intro">{SITE.hero.lead}</p>
-      <a class="hero__cta" href={SITE.hero.ctaHref} data-glide>{SITE.hero.cta} <span aria-hidden="true">→</span></a>
+      <a class="hero__cta" href={SITE.hero.ctaHref} data-glide="center">{SITE.hero.cta} <span aria-hidden="true">→</span></a>
     </div>
     <div class="hero__stream container">
       <KeywordStream keywords={keywords} />
     </div>
   </section>
 
-  <section class="section container why" id="the-current" aria-labelledby="why-title">
-    <div class="why__head">
-      <span class="annot">evolving perspective</span>
-      <h2 class="why__title display-face" id="why-title">{SITE.homeAbout.title}</h2>
-    </div>
-    <div class="why__body">
-      <p class="why__first">{SITE.homeAbout.lead}</p>
-      <p>{SITE.homeAbout.text}</p>
-      {flow.length > 0 && <a class="text-link" href="#the-current-flow" data-glide="center">Explore the latest →</a>}
-    </div>
-  </section>
-
-  <div class="container section shortcuts-wrap">
-    <Currents entries={site.entries.length} library={site.library.length} />
-  </div>
-
   {
     flow.length === 0 ? (
-      <section class="section container">
+      <section class="section container" id="the-current-flow">
         <p class="empty">
           <span class="annot">the first entries are on their way</span>
         </p>
@@ -123,13 +107,25 @@ const leadArt = lead ? flowSvg(lead.id) : '';
             </ul>
           )}
         </div>
-        <p class="flow__more">
-          <a class="text-link" href="/journal/">All Journal entries →</a>
-          <a class="text-link" href="/library/">The whole Library →</a>
-        </p>
       </section>
     )
   }
+
+  <section class="section container why" id="the-current" aria-labelledby="why-title">
+    <div class="why__head">
+      <span class="annot">evolving perspective</span>
+      <h2 class="why__title display-face" id="why-title">{SITE.homeAbout.title}</h2>
+    </div>
+    <div class="why__body">
+      <p class="why__first">{SITE.homeAbout.lead}</p>
+      <p>{SITE.homeAbout.text}</p>
+    </div>
+  </section>
+
+  <div class="container section shortcuts-wrap">
+    <Currents entries={site.entries.length} library={site.library.length} />
+  </div>
+
 
 </Base>
 
@@ -285,13 +281,6 @@ const leadArt = lead ? flowSvg(lead.id) : '';
 
   .flow__art img {
     object-fit: cover;
-  }
-
-  .flow__more {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0 28px;
-    margin: 36px 0 0;
   }
 
   .flow__lead h3 {
