@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
 import Ocean3D from '../components/Ocean3D.astro';
-import SectionArrows from '../components/SectionArrows.astro';
 import Currents from '../components/Currents.astro';
 import KeywordStream from '../components/KeywordStream.astro';
 import StateBadge from '../components/StateBadge.astro';
@@ -23,7 +22,7 @@ const leadArt = lead ? flowSvg(lead.id) : '';
 
 ---
 
-<Base>
+<Base arrows="#the-current-flow, #the-current">
   <section class="hero" aria-labelledby="hero-title">
     <Ocean3D />
     <div class="hero__text container">
@@ -128,7 +127,6 @@ const leadArt = lead ? flowSvg(lead.id) : '';
   </div>
 
 
-  <SectionArrows stops="#the-current-flow, #the-current" label="Move through the home page" />
 </Base>
 
 <script>

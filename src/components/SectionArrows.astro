@@ -1,8 +1,8 @@
 ---
 /**
  * Two small floating arrows: ↓ glides to the next stop on the page, ↑ returns to the top.
- * Used on long Journal entries (stops: each section heading, then the sources) and on the
- * home page (stops: The Current Flow, then The Current).
+ * Rendered once by the Base layout on every page; each page names its stops (Journal entries:
+ * section headings then sources; home: The Current Flow, The Current; lists: each item).
  *
  * A stop that is a <section> lands with its heading near the top; if the section marks the
  * end of its content with [data-glide-end] and that fits on screen, the content is centred.
@@ -115,6 +115,8 @@ const { stops = '.read__body h2, .read__foot', label = 'Move through this entry'
     top.addEventListener('click', () => go(0));
 
     const update = () => {
+      // a page that fits on one screen needs no arrows
+      nav.hidden = maxY() < 40;
       top.disabled = scrollY < 8;
       next.disabled = scrollY >= maxY() - 8;
     };

@@ -30,7 +30,7 @@ const spread = resolveSpread(d.spread, true);
 const spreadOptions = spread ? { ...spread, scene: spread.scene ?? ('ripple' as const) } : null;
 ---
 
-<Base title={d.title} description={d.introduction}>
+<Base title={d.title} description={d.introduction} arrows=".entry-list > li">
   {
     spreadOptions && (
       <Spread seed={question.id} options={spreadOptions} title={d.title} lang={d.lang}>

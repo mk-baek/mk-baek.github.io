@@ -14,7 +14,7 @@ const kinds = (Object.keys(libraryKindLabel) as LibraryItem['data']['kind'][]).f
 const cards = items.map((item) => ({ item, card: libraryCard(item), fallback: sceneSvg('', item.id) }));
 ---
 
-<Base title="Library" description="Books, reports, and articles I recommend. Links go to the original source.">
+<Base title="Library" description="Books, reports, and articles I recommend. Links go to the original source." arrows=".shelf > li">
   <div class="container">
     <header class="page-head measure">
       <span class="annot">what informs me</span>

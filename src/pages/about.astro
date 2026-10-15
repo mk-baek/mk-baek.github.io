@@ -11,7 +11,7 @@ const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').rep
 const rich = (s: string) => escape(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 ---
 
-<Base title={why.title} description={SITE.description}>
+<Base title={why.title} description={SITE.description} arrows=".meanings">
   <div class="container about">
     <div class="about__intro">
       <header class="page-head about__head">
