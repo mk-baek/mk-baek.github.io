@@ -31,11 +31,11 @@ Amazon과 Microsoft의 공동 프로젝트 소식은 그때 고민했던 ‘어�
 
 ## What I want to remember
 
-**1. 선언이 구체적인 장소와 행동을 만났습니다.** Amazon과 Microsoft는 독일 헤센주에서 환경단체 NABU 및 지역 파트너들과 함께 습지를 복원하는 프로젝트를 발표했습니다. 두 기업은 완공 후 지역 지하수가 해마다 7억 5천만 리터 이상 보충될 것으로 예상합니다. 다만 이는 이미 달성한 성과가 아니라 앞으로 확인해야 할 기대 효과입니다. [관련 기사](https://www.esgtoday.com/amazon-microsoft-partner-on-750-million-liter-water-replenishment-project/)
+**1. 선언이 구체적인 장소와 행동을 만났습니다.** Amazon과 Microsoft는 독일 헤센주에서 환경단체 NABU 및 지역 파트너들과 함께 습지를 복원하는 프로젝트를 발표했습니다. 공식 발표에 따르면 습지 복원 완료 후 연간 7억 5천만 리터 이상의 물이 지역 지하수로 보충될 것으로 예상됩니다. 다만 이는 이미 달성한 성과가 아니라 앞으로 확인해야 할 기대 효과입니다. [관련 기사](https://www.esgtoday.com/amazon-microsoft-partner-on-750-million-liter-water-replenishment-project/)
 
-**2. 기업의 자금이 지역의 실행 역량과 만납니다.** 인공 배수시설을 걷어 내 물이 천천히 흐르며 땅에 스며들게 하는 복원 방식에 더해 지역의 토지 소유자, 농민, 지방정부가 함께 참여하는 구조가 눈에 들어왔습니다. 시설 밖의 물 문제에 대응하려면 그 땅을 실제로 관리하고 변화를 만들어 갈 지역의 주체가 필요하다는 점을 보여 줍니다. [공식 발표](https://www.aboutamazon.eu/news/sustainability/amazon-microsoft-water-replenishment-project-nabu-germany)
+**2. 기업은 자금을 지원하고 지역의 전문기관과 이해관계자는 복원을 실행합니다.** 이번 프로젝트는 Amazon과 Microsoft가 자금을 지원하고 NABU가 지역 토지 소유자 및 농민, 지방정부와 협력해 복원을 추진하는 구조입니다. 인공 배수시설을 걷어 내 물이 천천히 흐르며 땅에 스며들게 하는 복원 방식에 더해 지역의 토지 소유자, 농민, 지방정부가 함께 참여하는 구조가 눈에 들어왔습니다. 시설 밖의 물 문제에 대응하려면 그 땅을 실제로 관리하고 변화를 만들어 갈 지역의 주체가 필요하다는 점을 보여 줍니다. [공식 발표](https://www.aboutamazon.eu/news/sustainability/amazon-microsoft-water-replenishment-project-nabu-germany)
 
-**3. 실행 이후에 무엇을 볼지도 계획에 담았습니다.** 공식 발표에는 2028년부터 2038년까지 생물다양성의 변화를 해마다 관찰하는 계획이 들어 있습니다. 물 보충량에 대한 기대에 그치지 않고 생태계의 변화를 오래 지켜보겠다는 점이 중요하게 느껴졌습니다.
+**3. 생물다양성에 대한 장기 모니터링 계획도 마련했습니다.** 공식 발표에 따르면 2028년부터 2038년까지 포유류와 조류, 곤충, 양서류 및 파충류의 변화를 매년 관찰할 계획입니다. 물 보충량에 대한 기대에 그치지 않고 생태계의 변화를 오래 지켜보겠다는 점이 중요하게 느껴졌습니다. 다만 이러한 생태계 모니터링이 예상 물 보충량의 검증까지 포함하는지는 별도로 확인할 필요가 있습니다.
 
 [![Amazon과 Microsoft의 독일 공동 물 보충 프로젝트 공식 발표 페이지](/images/water-positive-from-pledge-to-action/amazon-nabu-announcement.webp)](https://www.aboutamazon.eu/news/sustainability/amazon-microsoft-water-replenishment-project-nabu-germany)
 
