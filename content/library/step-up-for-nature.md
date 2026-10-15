@@ -1,6 +1,6 @@
 ---
 addedAt: 2026-10-14
-url: https://sciencebasedtargetsnetwork.org/
+url: https://sciencebasedtargetsnetwork.org/step-up-for-nature-report/
 title: "Step Up for Nature: The Business Case for Science-Based Targets"
 kind: report
 publisher: Science Based Targets Network (SBTN)
