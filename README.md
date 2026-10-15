@@ -109,7 +109,7 @@ context: seminar        # course | seminar | forum | reading | practice | reflec
 quote: "..."            # insight: 그 문장 (짧게)
 quoteBy: "..."          # insight: 누가 말했거나 썼는지
 questions: [environmental-risk-and-corporate-choices]  # 탐구 질문 0~2개 (선택)
-topics: [Carbon, Energy Transition]                    # 4개 이하 — 홈의 키워드 흐름이 됩니다
+topics: [Carbon, Energy Transition]                    # 5개 이하 — 홈의 키워드 흐름이 됩니다
 sources:                # 이 글이 다루는 원문 (선택)
   - title: "원문 제목"
     authorOrPublisher: "저자, 매체 또는 연사"

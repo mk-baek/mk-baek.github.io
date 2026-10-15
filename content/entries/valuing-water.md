@@ -5,7 +5,7 @@ type: project
 summary: "USC Marshall x Ramboll Denmark Water와 함께한 Regenerative Water Stewardship 프로젝트 회고."
 status: published
 questions: [ai-and-complex-systems]
-topics: [Water, AI, Nature, Corporate Strategy]
+topics: [Water Stewardship, Water, AI, Supply Chain, Corporate Strategy]
 featured: 1
 tagline: "Not just managing water. Leading with water."
 lang: ko

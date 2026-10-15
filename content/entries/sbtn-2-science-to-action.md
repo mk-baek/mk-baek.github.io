@@ -12,7 +12,7 @@ quoteSource:
   title: "SBTN 2.0 공식 발표"
   url: https://sciencebasedtargetsnetwork.org/news/news/science-based-targets-for-nature-2-0-a-practical-route-to-credible-action-on-nature/
 questions: [environmental-risk-and-corporate-choices]
-topics: [Nature, Science-Based Targets, Corporate Strategy]
+topics: [Nature, Science-Based Targets, Supply Chain, Corporate Strategy]
 sources:
   - title: "SBTN — Who we are"
     url: https://sciencebasedtargetsnetwork.org/about/

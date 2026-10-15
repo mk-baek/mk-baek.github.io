@@ -6,7 +6,7 @@ status: published
 publishedAt: 2026-10-14
 context: reading
 questions: [environmental-risk-and-corporate-choices]
-topics: [Water Stewardship, Nature, Corporate Strategy]
+topics: [Water Stewardship, Water, Nature, Corporate Strategy]
 sources:
   - title: "Amazon, Microsoft Partner on 750 Million Liter Water Replenishment Project"
     authorOrPublisher: "Kenny Fisher, ESG Today"

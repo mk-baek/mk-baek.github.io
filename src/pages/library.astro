@@ -40,9 +40,16 @@ const cards = items.map((item) => ({ item, card: libraryCard(item), fallback: sc
             </div>
           )}
 
+          <p class="topic" data-topic-chip hidden>
+            Topic: <strong data-topic-label />{' '}
+            <button type="button" class="btn btn--small" data-topic-clear aria-label="Clear topic">
+              ✕
+            </button>
+          </p>
+
           <ul class="shelf" data-shelf>
             {cards.map(({ item, card, fallback }) => (
-              <li id={item.id} data-kind={item.data.kind} lang={item.data.lang === 'ko' ? 'ko' : undefined}>
+              <li id={item.id} data-kind={item.data.kind} data-topics={item.data.topics.map((t) => t.trim().toLowerCase()).join('|')} lang={item.data.lang === 'ko' ? 'ko' : undefined}>
                 <article class="card">
                   <a class="card__media" href={item.data.url} rel="noopener" target="_blank" tabindex="-1" aria-hidden="true">
                     <span class="card__fallback" set:html={fallback} />
@@ -109,6 +116,11 @@ const cards = items.map((item) => ({ item, card: libraryCard(item), fallback: sc
     flex-wrap: wrap;
     gap: 8px;
     margin: 0 0 28px;
+  }
+
+  .topic {
+    margin: 0 0 24px;
+    color: var(--ink-soft);
   }
 
   .shelf {
@@ -261,29 +273,54 @@ const cards = items.map((item) => ({ item, card: libraryCard(item), fallback: sc
     else img.addEventListener('error', hide);
   }
 
-  // Kind filter (books / reports / articles …), kept in the address as ?kind=
+  // Filters kept in the address: ?kind= (books / reports / …) and ?topic= (from a home-page keyword)
   const group = document.querySelector<HTMLElement>('[data-kinds]');
   const shelf = document.querySelector<HTMLElement>('[data-shelf]');
-  if (group && shelf) {
-    const buttons = Array.from(group.querySelectorAll<HTMLButtonElement>('[data-kind]'));
+  const chip = document.querySelector<HTMLElement>('[data-topic-chip]');
+  if (shelf) {
+    const buttons = group ? Array.from(group.querySelectorAll<HTMLButtonElement>('[data-kind]')) : [];
     const valid = new Set(buttons.map((b) => b.dataset.kind));
-    const apply = (kind: string) => {
-      buttons.forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.kind ?? '') === kind)));
-      for (const li of Array.from(shelf.children) as HTMLElement[]) li.hidden = Boolean(kind) && li.dataset.kind !== kind;
+    const read = () => {
+      const p = new URLSearchParams(location.search);
+      const k = p.get('kind') ?? '';
+      return { kind: valid.has(k) ? k : '', topic: (p.get('topic') ?? '').trim() };
     };
-    const fromUrl = () => {
-      const k = new URLSearchParams(location.search).get('kind') ?? '';
-      return valid.has(k) ? k : '';
+    let state = read();
+    const apply = () => {
+      const topicKey = state.topic.toLowerCase();
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.kind ?? '') === state.kind)));
+      for (const li of Array.from(shelf.children) as HTMLElement[])
+        li.hidden =
+          (Boolean(state.kind) && li.dataset.kind !== state.kind) ||
+          (Boolean(topicKey) && !(li.dataset.topics ?? '').split('|').includes(topicKey));
+      if (chip) {
+        chip.hidden = !state.topic;
+        chip.querySelector('[data-topic-label]')!.textContent = state.topic;
+      }
+    };
+    const write = () => {
+      const p = new URLSearchParams();
+      if (state.kind) p.set('kind', state.kind);
+      if (state.topic) p.set('topic', state.topic);
+      history.pushState(null, '', p.toString() ? `?${p}` : location.pathname);
     };
     buttons.forEach((b) =>
       b.addEventListener('click', () => {
-        const kind = b.dataset.kind ?? '';
-        history.pushState(null, '', kind ? `?kind=${kind}` : location.pathname);
-        apply(kind);
+        state = { ...state, kind: b.dataset.kind ?? '' };
+        write();
+        apply();
       }),
     );
-    window.addEventListener('popstate', () => apply(fromUrl()));
-    group.hidden = false;
-    apply(fromUrl());
+    chip?.querySelector('[data-topic-clear]')?.addEventListener('click', () => {
+      state = { ...state, topic: '' };
+      write();
+      apply();
+    });
+    window.addEventListener('popstate', () => {
+      state = read();
+      apply();
+    });
+    if (group) group.hidden = false;
+    apply();
   }
 </script>

@@ -403,7 +403,7 @@ export function keywordStream(site: SiteData, limit = 10): Keyword[] {
   const weighted = ranked.map((k, i) => ({
     label: k.label,
     count: k.count,
-    href: k.inJournal ? `/journal/?topic=${encodeURIComponent(k.label)}` : '/library/',
+    href: k.inJournal ? `/journal/?topic=${encodeURIComponent(k.label)}` : `/library/?topic=${encodeURIComponent(k.label)}`,
     weight: weightAt(i),
   }));
 

@@ -1,10 +1,12 @@
 ---
 import Base from '../../layouts/Base.astro';
 import EntryItem from '../../components/EntryItem.astro';
-import { getSite, explorableQuestions, isFromTalks, plainText, typePlural, type EntryType } from '../../lib/content';
+import { getSite, explorableQuestions, isFromTalks, libraryCard, libraryKindLabel, plainText, typePlural, type EntryType } from '../../lib/content';
 
 const site = await getSite();
 const entries = site.entries;
+// shown under the entries when a topic is chosen (e.g. from a home-page keyword)
+const libraryPicks = site.library.map((l) => ({ item: l, card: libraryCard(l), topics: l.data.topics.map((t) => t.trim().toLowerCase()).join('|') }));
 const types = (['project', 'note', 'insight'] as EntryType[]).filter((t) => entries.some((e) => e.data.type === t));
 const questions = explorableQuestions(site).filter((q) => entries.some((e) => e.data.questions.includes(q.id)));
 
@@ -97,6 +99,27 @@ const index = entries.map((e) => ({
           </div>
 
           <nav class="pager" aria-label="Pages" data-pager hidden />
+
+          {libraryPicks.length > 0 && (
+            <section class="also" aria-labelledby="also-title" data-also hidden>
+              <span class="annot">also on this topic</span>
+              <h2 class="also__title" id="also-title">In the Library</h2>
+              <ul class="entry-list">
+                {libraryPicks.map(({ item, card, topics }) => (
+                  <li data-topics={topics} hidden lang={item.data.lang === 'ko' ? 'ko' : undefined}>
+                    <p class="meta">
+                      <span>Library · {libraryKindLabel[item.data.kind]}</span>
+                      {item.data.year && <span>{item.data.year}</span>}
+                    </p>
+                    <h3>
+                      <a href={`/library/#${item.id}`}>{card.title}</a>
+                    </h3>
+                    <p>{item.data.why}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
           <script type="application/json" id="journal-index" set:html={JSON.stringify(index)} />
         </>
       )
@@ -116,6 +139,16 @@ const index = entries.map((e) => ({
 
   .journal__head p {
     margin-inline: auto;
+  }
+
+  .also {
+    margin-top: 64px;
+  }
+
+  .also__title {
+    font-size: var(--title-section);
+    font-weight: 300;
+    margin: 4px 0 8px;
   }
 
   .filters {
@@ -281,6 +314,18 @@ const index = entries.map((e) => ({
         if (matches[i]) n++;
         row.hidden = !show;
       });
+
+      // Library picks on the same topic
+      const also = document.querySelector<HTMLElement>('[data-also]');
+      if (also) {
+        let shown = 0;
+        for (const li of Array.from(also.querySelectorAll<HTMLElement>('li[data-topics]'))) {
+          const on = Boolean(topicKey) && (li.dataset.topics ?? '').split('|').includes(topicKey);
+          li.hidden = !on;
+          if (on) shown++;
+        }
+        also.hidden = shown === 0;
+      }
 
       const filtered = Boolean(state.q || state.type || state.question || state.from || state.topic);
       countEl.textContent = filtered ? `${total} ${total === 1 ? 'entry' : 'entries'} found` : `${total} entries`;
