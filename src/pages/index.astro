@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Ocean3D from '../components/Ocean3D.astro';
+import SectionArrows from '../components/SectionArrows.astro';
 import Currents from '../components/Currents.astro';
 import KeywordStream from '../components/KeywordStream.astro';
 import StateBadge from '../components/StateBadge.astro';
@@ -84,9 +85,6 @@ const leadArt = lead ? flowSvg(lead.id) : '';
                 <StateBadge state={lead.state} />
               </h3>
               <p class="flow__summary">{lead.summary}</p>
-              <p class="flow__next">
-                <a class="text-link" href="#the-current" data-glide>Explore The Current →</a>
-              </p>
             </article>
           )}
           {side.length > 0 && (
@@ -130,6 +128,7 @@ const leadArt = lead ? flowSvg(lead.id) : '';
   </div>
 
 
+  <SectionArrows stops="#the-current-flow, #the-current" label="Move through the home page" />
 </Base>
 
 <script>
@@ -306,11 +305,6 @@ const leadArt = lead ? flowSvg(lead.id) : '';
   .flow__summary {
     color: var(--ink-soft);
     max-width: 44em;
-  }
-
-  /* a plain link under the lead item that glides down to The Current */
-  .flow__next {
-    margin: 22px 0 0;
   }
 
   .flow__side h3 {

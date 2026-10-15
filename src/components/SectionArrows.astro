@@ -1,18 +1,27 @@
 ---
 /**
- * Two small floating arrows for long Journal entries:
- * ↓ glides to the next section heading (then to the sources at the end), ↑ returns to the top.
- * They appear once the reader has scrolled past the opening of the entry.
+ * Two small floating arrows: ↓ glides to the next stop on the page, ↑ returns to the top.
+ * Used on long Journal entries (stops: each section heading, then the sources) and on the
+ * home page (stops: The Current Flow, then The Current).
+ *
+ * A stop that is a <section> lands with its heading near the top; if the section marks the
+ * end of its content with [data-glide-end] and that fits on screen, the content is centred.
  * With "Pause motion" or reduced motion the page jumps instead of gliding.
  */
+interface Props {
+  /** CSS selector for the stops, in page order */
+  stops?: string;
+  label?: string;
+}
+const { stops = '.read__body h2, .read__foot', label = 'Move through this entry' } = Astro.props;
 ---
 
-<nav class="arrows" aria-label="Move through this entry" data-arrows hidden>
+<nav class="arrows" aria-label={label} data-arrows data-stops={stops}>
   <button type="button" class="arrows__btn" data-arrow="next" aria-label="Next section">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9.5l6 6 6-6" /></svg>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9.5l6 6 6-6"></path></svg>
   </button>
   <button type="button" class="arrows__btn" data-arrow="top" aria-label="Back to top">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 14.5l6-6 6 6" /></svg>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 14.5l6-6 6 6"></path></svg>
   </button>
 </nav>
 
@@ -25,18 +34,6 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    opacity: 0;
-    transform: translateY(8px);
-    pointer-events: none;
-    transition:
-      opacity var(--ease),
-      transform var(--ease);
-  }
-
-  .arrows.is-shown {
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
   }
 
   .arrows__btn {
@@ -93,27 +90,39 @@
   if (nav) {
     const next = nav.querySelector<HTMLButtonElement>('[data-arrow="next"]')!;
     const top = nav.querySelector<HTMLButtonElement>('[data-arrow="top"]')!;
-    // stops: each section heading in the entry, then the sources/footer at the end
-    const stops = Array.from(document.querySelectorAll<HTMLElement>('.read__body h2, .read__foot'));
+    const stops = Array.from(document.querySelectorAll<HTMLElement>(nav.dataset.stops ?? ''));
     const GAP = 24; // space left above a heading when we land on it
     const still = () =>
       matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('motion-paused');
-    const go = (y: number) => scrollTo({ top: Math.max(0, y), behavior: still() ? 'instant' : 'smooth' });
-    const nextStop = () => stops.find((el) => el.getBoundingClientRect().top > GAP + 8);
 
-    next.addEventListener('click', () => {
-      const el = nextStop();
-      go(el ? el.getBoundingClientRect().top + scrollY - GAP : document.documentElement.scrollHeight);
-    });
+    // where the page should scroll to for a stop
+    const targetY = (el: HTMLElement) => {
+      const isSection = el.tagName === 'SECTION';
+      const head = isSection ? ((el.firstElementChild as HTMLElement | null) ?? el) : el;
+      const headTop = head.getBoundingClientRect().top + scrollY;
+      const end = isSection ? el.querySelector<HTMLElement>('[data-glide-end]') : null;
+      if (end) {
+        const height = end.getBoundingClientRect().bottom + scrollY - headTop;
+        if (height + GAP * 2 <= innerHeight) return headTop - (innerHeight - height) / 2;
+      }
+      return headTop - GAP;
+    };
+    const maxY = () => document.documentElement.scrollHeight - innerHeight;
+    const nextY = () => stops.map(targetY).find((y) => y > scrollY + 8 && y < maxY() + 1);
+    const go = (y: number) => scrollTo({ top: Math.max(0, y), behavior: still() ? 'instant' : 'smooth' });
+
+    next.addEventListener('click', () => go(nextY() ?? maxY()));
     top.addEventListener('click', () => go(0));
 
     const update = () => {
-      nav.classList.toggle('is-shown', scrollY > innerHeight * 0.6);
-      next.disabled = !nextStop();
+      top.disabled = scrollY < 8;
+      next.disabled = scrollY >= maxY() - 8;
     };
-    nav.hidden = false;
     addEventListener('scroll', update, { passive: true });
     addEventListener('resize', update);
+    addEventListener('load', update);
+    // the page grows as images and fonts arrive; re-check the ends when it does
+    new ResizeObserver(update).observe(document.body);
     update();
   }
 </script>
