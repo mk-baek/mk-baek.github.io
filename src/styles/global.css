@@ -423,6 +423,12 @@ p {
   color: var(--deep);
 }
 
+/* an explainer box: a quote that opens with a bold heading (e.g. "Water Positive란?") is set smaller than the body */
+.prose blockquote:not(.spread__quote):has(> p:first-child > strong:only-child) {
+  font-size: 0.88em;
+  line-height: 1.75;
+}
+
 .prose blockquote:not(.spread__quote) p:last-child {
   margin: 0;
 }
