@@ -26,6 +26,12 @@
     "siteName": "Science Based Targets Network",
     "fetchedAt": "2026-10-15"
   },
+  "https://www.globalnaturewatch.org/": {
+    "title": "Forest Monitoring, Land Use & Deforestation Trends | Global Nature Watch",
+    "description": "Global Nature Watch offers free, real-time data, technology and tools for monitoring the world’s forests, enabling better protection against illegal deforestation and unsustainable practices.",
+    "image": "https://www.globalnaturewatch.org/preview.jpg",
+    "fetchedAt": "2026-10-20"
+  },
   "https://www.ipcc.ch/report/ar6/syr/": {
     "title": "AR6 Synthesis Report: Climate Change 2023",
     "description": "Intergovernmental Panel on Climate Change",

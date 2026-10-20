@@ -109,7 +109,7 @@ const index = entries.map((e) => ({
                   <li data-topics={topics} hidden lang={item.data.lang === 'ko' ? 'ko' : undefined}>
                     <p class="meta">
                       <span>Library · {libraryKindLabel[item.data.kind]}</span>
-                      {item.data.year && <span>{item.data.year}</span>}
+                      {item.data.year ? <span>{item.data.year}</span> : item.data.yearLabel && <span>{item.data.yearLabel}</span>}
                     </p>
                     <h3>
                       <a href={`/library/#${item.id}`}>{card.title}</a>
