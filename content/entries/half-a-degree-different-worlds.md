@@ -11,22 +11,10 @@ sources:
     authorOrPublisher: "IPCC"
     url: https://www.ipcc.ch/sr15/
     publishedYear: 2018
-  - title: "IPCC AR6 WGI — The Physical Science Basis"
+  - title: "IPCC Sixth Assessment Report (AR6): WGI, WGII, WGIII and Synthesis Report"
     authorOrPublisher: "IPCC"
-    url: https://www.ipcc.ch/report/ar6/wg1/
-    publishedYear: 2021
-  - title: "IPCC AR6 WGII — Impacts, Adaptation and Vulnerability"
-    authorOrPublisher: "IPCC"
-    url: https://www.ipcc.ch/report/ar6/wg2/
-    publishedYear: 2022
-  - title: "IPCC AR6 WGIII — Mitigation of Climate Change"
-    authorOrPublisher: "IPCC"
-    url: https://www.ipcc.ch/report/ar6/wg3/
-    publishedYear: 2022
-  - title: "IPCC AR6 Synthesis Report — Climate Change 2023"
-    authorOrPublisher: "IPCC"
-    url: https://www.ipcc.ch/report/ar6/syr/
-    publishedYear: 2023
+    url: https://www.ipcc.ch/assessment-report/ar6/
+    locator: "2021–2023"
   - title: "Indicators of Global Climate Change 2025"
     authorOrPublisher: "Forster et al., Earth System Science Data"
     url: https://essd.copernicus.org/articles/18/3889/2026/essd-18-3889-2026.html
