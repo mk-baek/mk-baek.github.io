@@ -154,7 +154,7 @@ const library = defineCollection({
       author: z.string().optional(),
       publisher: z.string().optional(),
       year: z.number().int().optional(),
-      /** shown where the year would be, for things without one (e.g. "Data Source" for a live tool) */
+      /** a short label shown after the year (e.g. "Data Source" for a live tool) */
       yearLabel: z.string().optional(),
       why: z.string().min(1, 'Say in one sentence why you recommend it'),
       /** optional: replaces the fetched preview text ("" hides it) */

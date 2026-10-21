@@ -6,7 +6,7 @@ kind: video
 author: Johan Rockström
 publisher: TED
 year: 2020
-why: "Eight minutes on the planetary boundaries behind every science-based target: why climate and nature have to be managed as one system, and why this decade matters."
+why: "Shows how close Earth's systems are to tipping points, and why crossing one planetary boundary pushes others: the case for treating climate and nature as one system."
 topics: [Nature, Climate Risk]
 status: published
 lang: en

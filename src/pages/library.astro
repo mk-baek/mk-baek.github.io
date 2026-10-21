@@ -68,7 +68,8 @@ const cards = items.map((item) => ({ item, card: libraryCard(item), fallback: sc
                     <p class="meta">
                       <span class="type">{libraryKindLabel[item.data.kind]}</span>
                       <span>{card.site}</span>
-                      {item.data.year ? <span>{item.data.year}</span> : item.data.yearLabel && <span>{item.data.yearLabel}</span>}
+                      {item.data.year && <span>{item.data.year}</span>}
+                      {item.data.yearLabel && <span>{item.data.yearLabel}</span>}
                     </p>
                     <h2>
                       <a href={item.data.url} rel="noopener" target="_blank">
