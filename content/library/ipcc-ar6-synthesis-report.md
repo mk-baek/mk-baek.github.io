@@ -1,7 +1,7 @@
 ---
 addedAt: 2026-10-14
 url: https://www.ipcc.ch/report/ar6/syr/
-title: "AR6 Synthesis Report: Climate Change 2023"
+title: "Climate Change 2023: Synthesis Report"
 kind: report
 image: https://www.ipcc.ch/report/ar6/syr/frontcover.jpg
 publisher: IPCC
