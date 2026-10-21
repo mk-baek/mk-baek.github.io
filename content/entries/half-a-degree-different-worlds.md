@@ -49,7 +49,7 @@ sources:
     authorOrPublisher: "IFRS Foundation"
     url: https://www.ifrs.org/issued-standards/ifrs-sustainability-standards-navigator/ifrs-s2-climate-related-disclosures/
     publishedYear: 2023
-featured: 2
+featured: 1
 lang: ko
 ---
 
