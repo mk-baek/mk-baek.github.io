@@ -35,6 +35,7 @@ sources:
     authorOrPublisher: "ILO"
     url: https://www.ilo.org/resource/news/increase-heat-stress-predicted-bring-productivity-loss-equivalent-80
     publishedYear: 2019
+featured: 2
 lang: ko
 ---
 

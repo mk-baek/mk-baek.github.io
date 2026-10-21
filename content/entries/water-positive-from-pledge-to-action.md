@@ -20,7 +20,6 @@ sources:
     authorOrPublisher: "Steve Solomon, Microsoft"
     url: https://www.microsoft.com/en-us/microsoft-cloud/blog/2024/12/09/sustainable-by-design-next-generation-datacenters-consume-zero-water-for-cooling/
     locator: "December 9, 2024"
-featured: 2
 lang: ko
 ---
 

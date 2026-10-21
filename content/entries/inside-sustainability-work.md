@@ -27,6 +27,7 @@ sources:
     authorOrPublisher: "Microsoft"
     url: https://blogs.microsoft.com/on-the-issues/2026/07/09/responsibly-building-the-ai-future/
     publishedYear: 2026
+featured: 1
 lang: ko
 ---
 
