@@ -39,6 +39,13 @@
     "siteName": "IPCC",
     "fetchedAt": "2026-10-15"
   },
+  "https://www.ted.com/talks/johan_rockstrom_10_years_to_transform_the_future_of_humanity_or_destabilize_the_planet": {
+    "title": "10 years to transform the future of humanity -- or destabilize the planet",
+    "description": "\"For the first time, we are forced to consider the real risk of destabilizing the entire planet,\" says climate impact scholar Johan Rockström. In a talk backed by vivid animations of the climate crisis, he shows how nine out of the 15 big biophysical systems that regulate the climate -- from the permafrost of Siberia to the great forests of the North to the Amazon rainforest -- are at risk of reaching tipping points, which could make Earth uninhabitable for humanity. Hear his plan for putting the planet back on the path of sustainability over the next 10 years -- and protecting the future of our children.",
+    "image": "https://pi.tedcdn.com/r/talkstar-photos.s3.amazonaws.com/uploads/9f1d9ff7-c037-4e97-8acf-280bf320ffae/JohanRockstrom_2020T-embed.jpg?u%5Br%5D=2&u%5Bs%5D=0.5&u%5Ba%5D=0.8&u%5Bt%5D=0.03&quality=82&c=1050%2C550&w=1050",
+    "siteName": "TED Talks",
+    "fetchedAt": "2026-10-21"
+  },
   "https://www.youtube.com/playlist?list=PL77CE8943362CB9B0": {
     "fetchedAt": "2026-10-15"
   }
