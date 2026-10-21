@@ -11,37 +11,63 @@ sources:
     authorOrPublisher: "IPCC"
     url: https://www.ipcc.ch/sr15/
     publishedYear: 2018
-  - title: "IPCC AR6 WGI — Summary for Policymakers"
+  - title: "IPCC AR6 WGI — The Physical Science Basis"
     authorOrPublisher: "IPCC"
-    url: https://www.ipcc.ch/report/ar6/wg1/chapter/summary-for-policymakers/
+    url: https://www.ipcc.ch/report/ar6/wg1/
     publishedYear: 2021
-  - title: "IPCC AR6 WGII — Summary for Policymakers"
+  - title: "IPCC AR6 WGII — Impacts, Adaptation and Vulnerability"
     authorOrPublisher: "IPCC"
-    url: https://www.ipcc.ch/report/ar6/wg2/chapter/summary-for-policymakers/
+    url: https://www.ipcc.ch/report/ar6/wg2/
     publishedYear: 2022
-  - title: "IPCC AR6 WGIII — Summary for Policymakers"
+  - title: "IPCC AR6 WGIII — Mitigation of Climate Change"
     authorOrPublisher: "IPCC"
-    url: https://www.ipcc.ch/report/ar6/wg3/chapter/summary-for-policymakers/
+    url: https://www.ipcc.ch/report/ar6/wg3/
     publishedYear: 2022
+  - title: "IPCC AR6 Synthesis Report — Climate Change 2023"
+    authorOrPublisher: "IPCC"
+    url: https://www.ipcc.ch/report/ar6/syr/
+    publishedYear: 2023
   - title: "Indicators of Global Climate Change 2025"
-    authorOrPublisher: "Forster et al."
+    authorOrPublisher: "Forster et al., Earth System Science Data"
     url: https://essd.copernicus.org/articles/18/3889/2026/essd-18-3889-2026.html
     publishedYear: 2026
   - title: "Emissions Gap Report 2025: Off Target"
     authorOrPublisher: "UNEP"
     url: https://www.unep.org/en/publications/report/emissions-gap-report-2025
     publishedYear: 2025
+  - title: "WMO confirms 2024 as warmest year on record"
+    authorOrPublisher: "World Meteorological Organization"
+    url: https://wmo.int/news/media-centre/wmo-confirms-2024-warmest-year-record-about-155degc-above-pre-industrial-level
+    publishedYear: 2025
+  - title: "Report on the Structured Expert Dialogue on the 2013–2015 review"
+    authorOrPublisher: "UNFCCC"
+    url: https://unfccc.int/sites/default/files/resource/docs/2015/sb/eng/inf01.pdf
+    publishedYear: 2015
+  - title: "Key aspects of the Paris Agreement"
+    authorOrPublisher: "UNFCCC"
+    url: https://www.unfccc.int/most-requested/key-aspects-of-the-paris-agreement
+  - title: "Global exposure to severe heat waves at 1.5°C and 2°C"
+    authorOrPublisher: "Dosio et al., Environmental Research Letters"
+    url: https://doaj.org/article/06c1754af2674d6a9a805878c6500cec
+    publishedYear: 2018
   - title: "Working on a Warmer Planet"
     authorOrPublisher: "ILO"
     url: https://www.ilo.org/resource/news/increase-heat-stress-predicted-bring-productivity-loss-equivalent-80
     publishedYear: 2019
+  - title: "NGFS Climate Scenarios"
+    authorOrPublisher: "Network for Greening the Financial System"
+    url: https://www.ngfs.net/ngfs-scenarios-portal/explore/
+  - title: "IFRS S2 Climate-related Disclosures"
+    authorOrPublisher: "IFRS Foundation"
+    url: https://www.ifrs.org/issued-standards/ifrs-sustainability-standards-navigator/ifrs-s2-climate-related-disclosures/
+    publishedYear: 2023
 featured: 2
 lang: ko
 ---
 
 0.5°C는 일상에서 거의 느껴지지 않는 차이입니다. 하지만 지구 평균기온이 1.5°C 오른 세계와 2°C 오른 세계를 나란히 놓으면 이야기가 달라집니다. 폭염이 찾아오는 빈도와 물을 구할 수 있는 지역, 살아남는 생태계와 사람이 일하고 거주할 수 있는 조건이 함께 달라지기 때문입니다.
 
-## 1.5°C and 2°C
+## Why 1.5°C and 2°C
 
 1.5°C와 2°C는 산업화 이전(1850–1900년)에 비해 지구의 장기 평균기온이 얼마나 올랐는지를 나타냅니다. 특정 도시의 여름 기온이나 어느 하루의 날씨가 아니며 지역과 계절에 따라 실제 변화의 크기는 다릅니다. 육지는 바다보다 빨리 데워지고 북극은 지구 평균보다 훨씬 빠르게 따뜻해집니다.
 
@@ -57,9 +83,7 @@ lang: ko
 
 각국의 계획이 그대로 이행된다면 어디에 도달할까요? UNEP의 2025년 보고서는 현재 정책만으로는 이번 세기 약 2.8°C, 각국이 제출한 감축 목표(NDC)를 모두 이행해도 2.3–2.5°C의 온난화를 전망합니다. 1.5°C와 2°C의 비교는 지금의 경로가 그 사이 어디쯤에 서게 될지를 묻는 일이기도 합니다.
 
-*출처: [IPCC AR6 WGI, SPM](https://www.ipcc.ch/report/ar6/wg1/chapter/summary-for-policymakers/) · [IPCC AR6 WGI, Chapter 11](https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-11/) · [UNFCCC Structured Expert Dialogue, 2015](https://unfccc.int/sites/default/files/resource/docs/2015/sb/eng/inf01.pdf) · [UNFCCC, 파리협정](https://www.unfccc.int/most-requested/key-aspects-of-the-paris-agreement) · [IPCC SR15](https://www.ipcc.ch/sr15/) · [WMO](https://wmo.int/news/media-centre/wmo-confirms-2024-warmest-year-record-about-155degc-above-pre-industrial-level) · [Indicators of Global Climate Change 2025](https://essd.copernicus.org/articles/18/3889/2026/essd-18-3889-2026.html) · [UNEP Emissions Gap Report 2025](https://www.unep.org/en/publications/report/emissions-gap-report-2025)*
-
-## The Planet
+## What Changes for the Planet
 
 **극한 현상의 빈도**는 0.5°C 사이에서 뚜렷하게 달라집니다. IPCC는 인간의 영향이 없던 기후에서 일정 주기로 한 번 발생하던 사건이 온난화 수준별로 얼마나 자주 나타나는지 비교합니다.
 
@@ -89,9 +113,7 @@ lang: ko
 
 되돌리기 어려운 변화도 있습니다. 2°C 세계에서는 1.5°C 세계보다 수 세기에 걸쳐 녹는 영구동토층 면적이 약 150만–250만 km² 더 넓어지고 이 과정에서 추가 온실가스가 배출될 수 있습니다. 그린란드와 서남극 빙상의 불안정화처럼 한번 시작되면 되돌리기 어려운 ‘티핑 포인트’의 위험도 온난화가 높을수록 커지며 일부는 1.5–2°C 범위에서 촉발될 수 있다고 평가됩니다.
 
-*출처: [IPCC AR6 WGI, Figure SPM.6](https://www.ipcc.ch/report/ar6/wg1/figures/summary-for-policymakers/figure-spm-6/) · [IPCC AR6 WGI, Chapter 8](https://www.ipcc.ch/report/ar6/wg1/chapter/chapter-8/) · [IPCC SR15, SPM](https://www.ipcc.ch/sr15/chapter/spm/) · [SR15 Chapter 3](https://www.ipcc.ch/sr15/chapter/chapter-3/) · [IPCC AR6 WGI, SPM C.3](https://www.ipcc.ch/report/ar6/wg1/chapter/summary-for-policymakers/)*
-
-## People
+## What Changes for People
 
 **폭염**: 한 연구는 최소 5년에 한 번 극심한 폭염에 노출되는 세계 인구의 비율을 1.5°C에서 약 14%, 2°C에서 약 37%로 추정했습니다. 노출되는 사람이 세 배 가까이 늘어나는 셈입니다. 열 스트레스는 노동에도 직접 영향을 줍니다. ILO는 1.5°C 경로를 가정해도 2030년 열 스트레스로 세계 노동시간의 약 2.2%가 사라질 수 있다고 추정했는데, 이는 전일제 일자리 약 8천만 개에 해당하는 규모입니다. 냉방이 부족한 작업장과 야외 노동이 많은 지역일수록 부담이 큽니다.
 
@@ -101,9 +123,7 @@ lang: ko
 
 **빈곤**: 이 모든 차이는 같은 사람들에게 겹쳐 나타납니다. IPCC는 1.5°C로 제한하면 2050년까지 기후 위험에 노출되면서 빈곤에 취약한 인구를 최대 수억 명 줄일 수 있다고 평가합니다. 0.5°C의 차이는 결국 누가 더 큰 위험을 감당하게 되는지의 차이이기도 합니다.
 
-*출처: [Dosio et al., Environmental Research Letters, 2018](https://doaj.org/article/06c1754af2674d6a9a805878c6500cec) · [ILO](https://www.ilo.org/resource/news/increase-heat-stress-predicted-bring-productivity-loss-equivalent-80) · [IPCC SR15, SPM B.5](https://www.ipcc.ch/sr15/chapter/spm/) · [IPCC AR6 WGII, SPM B.4](https://www.ipcc.ch/report/ar6/wg2/chapter/summary-for-policymakers/)*
-
-## Business
+## What Changes for Business
 
 기업에게 1.5°C와 2°C의 차이는 두 종류의 위험으로 나타납니다. 온난화가 클수록 커지는 물리적 위험과 온난화를 억제하는 과정에서 커지는 전환 위험입니다. 두 위험은 반대 방향으로 움직입니다. 1.5°C 세계는 탄소 가격과 규제, 기술 전환이 빠른 대신 물리적 피해가 상대적으로 작고 2°C 이상의 세계는 그 반대입니다. 중앙은행과 금융감독기구의 협의체인 NGFS가 기후 시나리오를 질서 있는 전환(Net Zero 2050), 지연된 전환(Delayed Transition), 현재 정책 유지(Current Policies)로 나누는 이유도 여기에 있습니다.
 
@@ -121,15 +141,9 @@ lang: ko
 
 이런 이유로 국제 공시 기준인 IFRS S2는 기업이 서로 다른 기후 시나리오에서 전략이 얼마나 견딜 수 있는지 분석해 공개하도록 요구합니다. 1.5°C와 2°C는 기업에게 하나의 목표 숫자이면서 동시에 사업 계획을 시험하는 두 개의 다른 미래입니다.
 
-*출처: [NGFS Scenarios](https://www.ngfs.net/ngfs-scenarios-portal/explore/) · [IPCC AR6 SYR, SPM B.6](https://www.ipcc.ch/report/ar6/syr/) · [IFRS S2](https://www.ifrs.org/issued-standards/ifrs-sustainability-standards-navigator/ifrs-s2-climate-related-disclosures/)*
-
-## Net Zero and the Path
-
 기온 상승은 누적 CO₂ 배출과 거의 비례합니다. 순배출이 0보다 크면 누적량이 계속 늘고 온도도 계속 오릅니다. 그래서 **넷제로**, 즉 인간 활동에 의한 CO₂ 배출과 제거가 균형을 이루는 상태에 도달해야 온난화를 멈출 수 있습니다. IPCC가 평가한 1.5°C 경로에서 세계 CO₂ 순배출은 대체로 2050년대 초에 0이 됩니다. 메탄 등 다른 온실가스도 함께 크게 줄여야 합니다.
 
 도착 시점만큼 중요한 것은 **경로**입니다. 같은 2050년에 넷제로에 도달해도 그 사이 얼마나 배출했는지에 따라 최고 기온이 달라집니다. 1.5°C를 일시적으로 넘었다가 다시 내려오는 ‘오버슈트’ 경로는 그 기간 동안 추가 피해를 낳고 빙상 손실이나 종의 소멸처럼 일부 변화는 기온이 내려가도 되돌아오지 않습니다.
-
-*출처: [IPCC AR6 WGI, Technical Summary](https://www.ipcc.ch/report/ar6/wg1/chapter/technical-summary/) · [IPCC AR6 WGIII, SPM](https://www.ipcc.ch/report/ar6/wg3/chapter/summary-for-policymakers/) · [IPCC AR6 WGII, SPM B.6](https://www.ipcc.ch/report/ar6/wg2/chapter/summary-for-policymakers/)*
 
 ## The Question It Leaves
 
