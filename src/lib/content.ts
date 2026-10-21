@@ -311,9 +311,27 @@ export function latestFlow(site: SiteData, perGroup = 2): FlowItem[] {
   const entries = [...site.entries]
     .sort((a, b) => rank(a.data.featured) - rank(b.data.featured) || newest(latest(a.data.publishedAt, a.data.updatedAt), latest(b.data.publishedAt, b.data.updatedAt)))
     .slice(0, perGroup);
-  const library = libraryByYear(site.library)
-    .sort((a, b) => rank(a.data.featured) - rank(b.data.featured))
-    .slice(0, perGroup);
+  // Library picks: pinned items first; then, among the recently added (within 30 days of the
+  // latest addition), one of each kind in this order: book, video, report, link (newest addition
+  // first within a kind). Any slots left are filled by the remaining items in the same order.
+  const KIND_ORDER: Record<string, number> = { book: 0, video: 1, podcast: 1, report: 2, article: 2, other: 3 };
+  const added = (l: LibraryItem) => timestamp(l.data.addedAt) || 0;
+  const latestAdded = Math.max(0, ...site.library.map(added));
+  const RECENT = 30 * 24 * 60 * 60 * 1000;
+  const isRecent = (l: LibraryItem) => latestAdded - added(l) <= RECENT;
+  const ordered = libraryByYear(site.library).sort(
+    (a, b) =>
+      rank(a.data.featured) - rank(b.data.featured) ||
+      Number(isRecent(b)) - Number(isRecent(a)) ||
+      (KIND_ORDER[a.data.kind] ?? 9) - (KIND_ORDER[b.data.kind] ?? 9) ||
+      added(b) - added(a),
+  );
+  const pinned = ordered.filter((l) => l.data.featured !== undefined);
+  const firstOfKind = ordered.filter(
+    (l, i) => l.data.featured === undefined && isRecent(l) &&
+      ordered.findIndex((o) => o.data.featured === undefined && isRecent(o) && KIND_ORDER[o.data.kind] === KIND_ORDER[l.data.kind]) === i,
+  );
+  const library = [...new Set([...pinned, ...firstOfKind, ...ordered])].slice(0, perGroup);
   return [
     ...entries.map((e): FlowItem => {
       const date = latest(e.data.publishedAt, e.data.updatedAt);

@@ -6,7 +6,7 @@ kind: book
 author: Kate Raworth
 publisher: Random House Business
 year: 2017
-why: "A 21st-century alternative to growth-at-all-costs economics: an economy that meets everyone's basic needs without overshooting the planet's ecological limits, with business working in the space between."
+why: "A 21st-century alternative to growth-first economics: meeting everyone's needs within the planet's ecological limits."
 topics: [Nature, Sustainability Strategy, Corporate Strategy]
 status: published
 lang: en

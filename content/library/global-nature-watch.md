@@ -1,7 +1,8 @@
 ---
 addedAt: 2026-10-21
 url: https://www.globalnaturewatch.org/
-title: "Global Nature Watch (formerly Global Forest Watch)"
+title: "Global Nature Watch"
+description: "Formerly Global Forest Watch: WRI's open platform for monitoring forests, land and nature."
 kind: other
 publisher: World Resources Institute (WRI)
 year: 2026
